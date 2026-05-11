@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vestibulares - MEUPROVAO</title>
+    <link rel="icon" href="{{ url_for('static', filename='logo2.png') }}" type="image/png">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --red:    #ed0707;
+            --red-dk: #B22222;
+            --gold:   #FFD700;
+            --ink:    #111111;
+            --muted:  #6b6b6b;
+            --surface:#f5f3ef;
+            --white:  #ffffff;
+            --radius: 16px;
+            /* Cores por vestibular */
+            --provao-bg: #fff5f5;
+            --provao-ac: #ed0707;
+            --fuvest-bg: #fff8e1;
+            --fuvest-ac: #e65100;
+            --enem-bg:   #e8f5e9;
+            --enem-ac:   #2e7d32;
+        }
+
+        .vest-body { font-family: 'DM Sans', sans-serif; }
+
+        /* ── HERO ── */
+        .vest-hero {
+            background: linear-gradient(135deg, var(--ink) 0%, #2a2a2a 100%);
+            color: white;
+            padding: 72px 24px 80px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .vest-hero::before {
+            content:'';
+            position:absolute;
+            inset:0;
+            background:
+                radial-gradient(ellipse 55% 80% at 10% 50%, rgba(237,7,7,.2) 0%, transparent 70%),
+                radial-gradient(ellipse 40% 60% at 90% 20%, rgba(255,215,0,.12) 0%, transparent 70%);
+            pointer-events:none;
+        }
+        .vest-hero-eyebrow {
+            font-family: 'Syne', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .18em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 18px;
+            opacity: 0;
+            animation: fadeUp .5s .1s forwards;
+        }
+        .vest-hero h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(2rem, 5.5vw, 3.8rem);
+            font-weight: 800;
+            margin: 0 auto 20px;
+            max-width: 640px;
+            line-height: 1.1;
+            opacity: 0;
+            animation: fadeUp .5s .2s forwards;
+        }
+        .vest-hero p {
+            font-size: 1.05rem;
+            color: rgba(255,255,255,.72);
+            max-width: 500px;
+            margin: 0 auto;
+            line-height: 1.6;
+            opacity: 0;
+            animation: fadeUp .5s .32s forwards;
+        }
+
+        /* ── TABS ── */
+        .vest-tabs-wrap {
+            background: var(--white);
+            border-bottom: 1px solid #eee;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 12px rgba(0,0,0,.06);
+        }
+        .vest-tabs {
+            max-width: 860px;
+            margin: 0 auto;
+            display: flex;
+            padding: 0 24px;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+        .vest-tabs::-webkit-scrollbar { display: none; }
+        .vest-tab {
+            flex-shrink: 0;
+            padding: 18px 24px;
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: .9rem;
+            color: var(--muted);
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: color .2s, border-color .2s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+        .vest-tab:hover { color: var(--ink); }
+        .vest-tab.active { color: var(--red); border-bottom-color: var(--red); }
+
+        /* ── CONTENT PANELS ── */
+        .vest-panel { display: none; }
+        .vest-panel.active { display: block; }
+
+        /* ── CARD DE VESTIBULAR ── */
+        .vest-main {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 56px 24px;
+        }
+        .vest-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            border-radius: 99px;
+            font-family: 'Syne', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+        .badge-provao { background: var(--provao-bg); color: var(--provao-ac); }
+        .badge-fuvest  { background: var(--fuvest-bg); color: var(--fuvest-ac); }
+        .badge-enem    { background: var(--enem-bg);   color: var(--enem-ac);   }
+
+        .vest-main h2 {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            font-weight: 800;
+            color: var(--ink);
+            margin: 0 0 8px;
+            line-height: 1.1;
+        }
+        .vest-main .vest-subtitle {
+            font-size: 1.05rem;
+            color: var(--muted);
+            margin-bottom: 28px;
+            line-height: 1.5;
+        }
+        .vest-intro {
+            font-size: 1.05rem;
+            line-height: 1.75;
+            color: #444;
+            margin-bottom: 40px;
+        }
+
+        /* ── INFO GRID ── */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+        @media (max-width: 580px) { .info-grid { grid-template-columns: 1fr; } }
+        .info-card {
+            border: 1.5px solid #e8e8e8;
+            border-radius: var(--radius);
+            padding: 24px;
+            background: var(--white);
+            transition: box-shadow .2s;
+        }
+        .info-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,.08); }
+        .info-card-icon { font-size: 1.5rem; margin-bottom: 10px; display: block; }
+        .info-card h4 {
+            font-family: 'Syne', sans-serif;
+            font-size: .85rem;
+            font-weight: 700;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin: 0 0 8px;
+        }
+        .info-card p { font-size: .95rem; color: var(--ink); margin: 0; line-height: 1.5; }
+        .info-card strong { color: var(--red); }
+
+        /* ── COTAS TABLE ── */
+        .cotas-section h3 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--ink);
+            margin: 0 0 16px;
+        }
+        .cotas-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: .9rem;
+            margin-bottom: 40px;
+        }
+        .cotas-table th {
+            background: var(--ink);
+            color: var(--white);
+            padding: 12px 16px;
+            text-align: left;
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: .8rem;
+            letter-spacing: .06em;
+        }
+        .cotas-table th:first-child { border-radius: 10px 0 0 0; }
+        .cotas-table th:last-child  { border-radius: 0 10px 0 0; }
+        .cotas-table td {
+            padding: 11px 16px;
+            border-bottom: 1px solid #f0f0f0;
+            color: #333;
+            vertical-align: top;
+        }
+        .cotas-table tr:last-child td { border-bottom: none; }
+        .cotas-table tr:hover td { background: #fafafa; }
+        .cota-pill {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 99px;
+            font-weight: 700;
+            font-size: .78rem;
+            background: var(--provao-bg);
+            color: var(--red);
+        }
+
+        /* ── TIMELINE ── */
+        .timeline { position: relative; padding-left: 32px; margin-bottom: 40px; }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 7px; top: 0; bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--red), transparent);
+        }
+        .tl-item { position: relative; margin-bottom: 24px; }
+        .tl-dot {
+            position: absolute;
+            left: -29px; top: 4px;
+            width: 14px; height: 14px;
+            border-radius: 50%;
+            background: var(--red);
+            border: 3px solid var(--white);
+            box-shadow: 0 0 0 2px var(--red);
+        }
+        .tl-item h4 {
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: .95rem;
+            color: var(--ink);
+            margin: 0 0 4px;
+        }
+        .tl-item p { font-size: .9rem; color: var(--muted); margin: 0; }
+
+        /* ── TIPS ── */
+        .tips-box {
+            background: linear-gradient(135deg, #fff5f5, #fff8f8);
+            border: 1.5px solid rgba(237,7,7,.15);
+            border-radius: var(--radius);
+            padding: 28px 28px 20px;
+            margin-bottom: 40px;
+        }
+        .tips-box h3 {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: var(--red);
+            margin: 0 0 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .tips-box ul { list-style: none; padding: 0; margin: 0; }
+        .tips-box ul li {
+            font-size: .93rem;
+            color: #444;
+            padding: 8px 0;
+            border-bottom: 1px dashed rgba(237,7,7,.12);
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            line-height: 1.5;
+        }
+        .tips-box ul li:last-child { border-bottom: none; }
+        .tips-box ul li::before {
+            content: '✓';
+            color: var(--red);
+            font-weight: 700;
+            font-size: .85rem;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        /* ── CTA INLINE ── */
+        .vest-cta {
+            background: var(--ink);
+            color: var(--white);
+            border-radius: var(--radius);
+            padding: 32px;
+            text-align: center;
+            margin-top: 8px;
+        }
+        .vest-cta h3 {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 1.3rem;
+            margin: 0 0 10px;
+        }
+        .vest-cta p { font-size: .92rem; color: rgba(255,255,255,.72); margin: 0 0 20px; }
+        .vest-cta a {
+            display: inline-block;
+            padding: 11px 26px;
+            background: var(--gold);
+            color: var(--ink);
+            font-weight: 700;
+            font-size: .9rem;
+            border-radius: 99px;
+            text-decoration: none;
+            transition: transform .2s;
+        }
+        .vest-cta a:hover { transform: translateY(-2px); }
+
+        @keyframes fadeUp {
+            from { opacity:0; transform:translateY(18px); }
+            to   { opacity:1; transform:translateY(0); }
+        }
+        .fade-in { opacity:0; transform:translateY(20px); transition: opacity .5s ease, transform .5s ease; }
+        .fade-in.visible { opacity:1; transform:translateY(0); }
+
+        /* Dark mode */
+        body.dark-mode .vest-tabs-wrap { background: #1e1e1e; border-color: #333; }
+        body.dark-mode .vest-tab       { color: #aaa; }
+        body.dark-mode .vest-tab:hover { color: #eee; }
+        body.dark-mode .vest-main h2   { color: #f0f0f0; }
+        body.dark-mode .info-card      { background: #2c2c2c; border-color: #444; }
+        body.dark-mode .info-card p    { color: #e0e0e0; }
+        body.dark-mode .cotas-table td { color: #ddd; border-color: #333; }
+        body.dark-mode .cotas-table tr:hover td { background: #333; }
+        body.dark-mode .tips-box       { background: #1e1e1e; border-color: #4a1a1a; }
+        body.dark-mode .tips-box ul li { color: #ccc; }
+        body.dark-mode .tl-item h4     { color: #f0f0f0; }
+    </style>
+</head>
+<body class="vest-body">
+
+    <header class="top-nav">
+        <div class="nav-inner">
+            <div class="nav-left">
+                <a href="{{ url_for('index_page') }}">
+                    <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo MEUPROVAO" class="header-logo">
+                </a>
+            </div>
+            <button class="mobile-menu-toggle" aria-label="Abrir menu" aria-expanded="false">&#9776;</button>
+            <div class="nav-actions desktop-nav">
+                <a href="{{ url_for('index_page') }}"      class="nav-button">Página Inicial</a>
+                <a href="{{ url_for('sobre_page') }}"      class="nav-button">Sobre Nós</a>
+                <a href="{{ url_for('formulario_page') }}" class="nav-button">Enviar Nota</a>
+                <a href="{{ url_for('links_page') }}"      class="nav-button">Links Úteis</a>
+            </div>
+            <nav class="mobile-nav">
+                <a href="{{ url_for('index_page') }}"      class="nav-button">Página Inicial</a>
+                <a href="{{ url_for('sobre_page') }}"      class="nav-button">Sobre Nós</a>
+                <a href="{{ url_for('formulario_page') }}" class="nav-button">Enviar Nota</a>
+                <a href="{{ url_for('links_page') }}"      class="nav-button">Links Úteis</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="vest-hero">
+        <p class="vest-hero-eyebrow">Guia completo</p>
+        <h1>Entenda os principais vestibulares de SP</h1>
+        <p>Provão Paulista, Fuvest e ENEM — tudo que você precisa saber em um só lugar, sem enrolação.</p>
+    </section>
+
+    <!-- TABS -->
+    <div class="vest-tabs-wrap">
+        <div class="vest-tabs" role="tablist">
+            <a class="vest-tab active" data-panel="provao" role="tab" aria-selected="true">
+                🏆 Provão Paulista
+            </a>
+            <a class="vest-tab" data-panel="fuvest" role="tab" aria-selected="false">
+                📚 Fuvest
+            </a>
+            <a class="vest-tab" data-panel="enem" role="tab" aria-selected="false">
+                📝 ENEM
+            </a>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════
+         PANEL: PROVÃO PAULISTA
+    ════════════════════════════════════════ -->
+    <div class="vest-panel active" id="panel-provao">
+        <div class="vest-main fade-in">
+            <div class="vest-badge badge-provao">🏆 Exclusivo SP</div>
+            <h2>Provão Paulista Seriado</h2>
+            <p class="vest-subtitle">Aplicado pela VUNESP | Acesso a FATEC, UNESP, UNICAMP e USP</p>
+            <p class="vest-intro">
+                O <strong>Provão Paulista Seriado</strong> é um vestibular aplicado pela VUNESP que avalia
+                estudantes ao longo dos três anos do ensino médio. As provas acontecem no 1º, 2º e 3º anos,
+                e a pontuação final é uma média ponderada dos três anos — o que significa que você pode se
+                preparar e melhorar a nota a cada edição. O processo dá acesso às principais universidades
+                públicas do Estado de São Paulo.
+            </p>
+
+            <div class="info-grid">
+                <div class="info-card">
+                    <span class="info-card-icon">🏫</span>
+                    <h4>Instituições</h4>
+                    <p>FATEC, UNESP, UNICAMP e <strong>USP</strong> — as maiores universidades públicas de SP</p>
+                </div>
+                <div class="info-card">
+                    <span class="info-card-icon">📅</span>
+                    <h4>Frequência</h4>
+                    <p>Anual — prova aplicada <strong>uma vez por ano</strong> durante os três anos do EM</p>
+                </div>
+                <div class="info-card">
+                    <span class="info-card-icon">⚖️</span>
+                    <h4>Ponderação</h4>
+                    <p><strong>1º ano: 15% | 2º ano: 35% | 3º ano: 50%</strong> da nota final</p>
+                </div>
+                <div class="info-card">
+                    <span class="info-card-icon">🗓️</span>
+                    <h4>Chamadas</h4>
+                    <p>Resultados em <strong>chamadas regulares</strong> e listas de espera ao longo do ano</p>
+                </div>
+            </div>
+
+            <div class="cotas-section">
+                <h3>Sistema de Cotas (L1–L4)</h3>
+                <table class="cotas-table">
+                    <thead>
+                        <tr>
+                            <th>Cota</th>
+                            <th>Quem pode usar</th>
+                            <th>Requisitos adicionais</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="cota-pill">L1</span></td>
+                            <td>Escola pública + renda familiar ≤ 1,5 salário mínimo per capita + PPI</td>
+                            <td>Autodeclaração étnico-racial</td>
+                        </tr>
+                        <tr>
+                            <td><span class="cota-pill">L2</span></td>
+                            <td>Escola pública + renda familiar ≤ 1,5 salário mínimo per capita</td>
+                            <td>Comprovante de renda</td>
+                        </tr>
+                        <tr>
+                            <td><span class="cota-pill">L3</span></td>
+                            <td>Escola pública + PPI (Preto, Pardo ou Indígena)</td>
+                            <td>Autodeclaração + heteroidentificação</td>
+                        </tr>
+                        <tr>
+                            <td><span class="cota-pill">L4</span></td>
+                            <td>Escola pública (ampla concorrência dentro das cotas)</td>
+                            <td>Comprovante de escolaridade pública</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="cotas-section">
+                <h3>Grupos de Pontuação</h3>
+                <table class="cotas-table">
+                    <thead>
+                        <tr>
+                            <th>Grupo</th>
+                            <th>Perfil</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Grupo A</strong></td>
+                            <td>Estudante que faz as provas nos anos previstos (1º, 2º e 3º EM)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Grupo B</strong></td>
+                            <td>Estudante que perdeu uma prova ou ingressou no programa depois</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Grupo C</strong></td>
+                            <td>Formado — prestou todas as provas possíveis, aguarda chamada</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="tips-box">
+                <h3>💡 Dicas do Meu Provão</h3>
+                <ul>
+                    <li>Use nossa plataforma para ver notas de corte reais de quem foi aprovado — dados de 2025 e 2026 disponíveis</li>
+                    <li>O 3º ano vale 50% — priorize-o, mas não negligencie o 2º (35%)</li>
+                    <li>Cotas são cumulativas: use a mais específica para você — maior chance de aprovação</li>
+                    <li>Listas de espera são reais: muitos alunos entram na 2ª ou 3ª chamada</li>
+                    <li>Guarde todos os documentos de comprovação de renda e escolaridade pública desde o 1º ano</li>
+                </ul>
+            </div>
+
+            <div class="vest-cta">
+                <h3>Veja as notas de corte reais</h3>
+                <p>Dados coletados de aprovados reais em 2025 e 2026</p>
+                <a href="{{ url_for('index_page') }}">Buscar notas de corte →</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════
+         PANEL: FUVEST
+    ════════════════════════════════════════ -->
+    <div class="vest-panel" id="panel-fuvest">
+        <div class="vest-main fade-in">
+            <div class="vest-badge badge-fuvest">📚 Tradicional</div>
+            <h2>Fuvest</h2>
+            <p class="vest-subtitle">Fundação Universitária para o Vestibular | Acesso à USP</p>
+            <p class="vest-intro">
+                A <strong>Fuvest</strong> é o vestibular mais concorrido do Brasil e a principal porta de entrada
+                para a Universidade de São Paulo (USP). Com duas fases, exige preparação aprofundada e
+                habilidade de redação. Apesar de ser disputadíssima, é compatível com o Provão Paulista —
+                você pode fazer os dois.
+            </p>
+
+            <div class="info-grid">
+                <div class="info-card">
+                    <span class="info-card-icon">🏛️</span>
+                    <h4>Instituição</h4>
+                    <p>Acesso exclusivo à <strong>USP</strong> — todos os campi e cursos</p>
+                </div>
+                <div class="info-card">
+                    <span class="info-card-icon">📋</span>
+                    <h4>Formato</h4>
+                    <p><strong>2 fases:</strong> 1ª objetiva (90 questões) + 2ª discursiva com redação</p>
+                </div>
+                <div class="info-card">
+                    <span class="info-card-icon">📅</span>
+                    <h4>Calendário típico</h4>
+                    <p>Inscrições: <strong>agosto–setembro</strong> | 1ª fase: novembro | 2ª fase: janeiro</p>
+                </div>
+                <div class="info-card">
+                    <span class="info-card-icon">🎯</span>
+                    <h4>ENEM na Fuvest</h4>
+                    <p>Desde 2015, metade das vagas é preenchida por <strong>nota do ENEM</strong> (sem 2ª fase)</p>
+                </div>
+            </div>
+
+            <div class="cotas-section">
+                <h3>Modalidades de Inscrição</h3>
+                <table class="cotas-table">
+                    <thead><tr><th>Modalidade</th><th>Descrição</th></tr></thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Fuvest Vestibular</strong></td>
+                            <td>2 fases clássicas — 1ª objetiva + 2ª discursiva com redação</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Fuvest ENEM</strong></td>
+                            <td>Seleção com base exclusiva na nota do ENEM — sem 2ª fase</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Escola pública</strong></td>
+                            <td>Reserva de vagas (Lei de Cotas) com sub-cotas por renda e raça</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="cotas-section">
+                <h3>Fases e Estrutura</h3>
+                <div class="timeline">
+                    <div class="tl-item">
+                        <div class="tl-dot"></div>
+                        <h4>1ª Fase — Eliminatória</h4>
+                        <p>90 questões objetivas de todas as disciplinas. Geralmente em novembro. Elimina candidatos com base no ranking.</p>
+                    </div>
+                    <div class="tl-item">
+                        <div class="tl-dot"></div>
+                        <h4>2ª Fase — Classificatória</h4>
+                        <p>Provas discursivas em 2 dias + redação. Matérias específicas variam por curso. Janeiro/fevereiro.</p>
+                    </div>
+                    <div class="tl-item">
+                        <div class="tl-dot"></div>
+                        <h4>Resultado e Chamadas</h4>
+                        <p>Resultado em fevereiro. Chamadas adicionais até março/abril.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tips-box">
+                <h3>💡 Dicas para a Fuvest</h3>
+                <ul>
+                    <li>A redação da 2ª fase vale muito — treinar dissertação argumentativa é indispensável</li>
+                    <li>Nas questões de 2ª fase, a banca valoriza profundidade — vá além do óbvio</li>
+                    <li>Use provas anteriores: o estilo das questões é muito consistente ano a ano</li>
+                    <li>Na 1ª fase, não deixe questões de humanas e linguagens de lado — são fáceis pontos</li>
+                    <li>Se for pela modalidade ENEM, prepare-se bem para a redação do ENEM (nota 1000 faz diferença)</li>
+                </ul>
+            </div>
+
+            <div class="vest-cta">
+                <h3>Entre para a nossa comunidade</h3>
+                <p>Monitores da USP prontos para ajudar com Fuvest no Discord</p>
+                <a href="https://discord.gg/NFmkM5kNPX" target="_blank">Acessar Discord →</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════
+         PANEL: ENEM
+    ════════════════════════════════════════ -->
+    <div class="vest-panel" id="panel-enem">
+        <div class="vest-main fade-in">
+            <div class="vest-badge badge-enem">📝 Nacional</div>
+            <h2>ENEM</h2>
+            <p class="vest-subtitle">Exame Nacional do Ensino Médio | INEP/MEC</p>
+            <p class="vest-intro">
+                O <strong>ENEM</strong> é a maior porta de entrada para o ensino superior do Brasil.
+                Aplicado pelo INEP, abre acesso ao SISU (universidades federais), ProUni (bolsas em faculdades
+                privadas) e FIES (financiamento estudantil) — além de ser usado pela Fuvest e por centenas de
+                outras universidades. Para estudantes da rede pública, é estratégico fazer ENEM e Provão Paulista
+                ao mesmo tempo.
+            </p>
+
+            <div class="info-grid">
+                <div class="info-card">
+                    <span class="info-card-icon">🌎</span>
+                    <h4>Abrangência</h4>
+                    <p>Acesso ao <strong>SISU, ProUni, FIES</strong> e universidades privadas conveniadas</p>
+                </div>
+                <div class="info-card">
+                    <span class="info-card-icon">📝</span>
+                    <h4>Formato</h4>
+                    <p><strong>2 dias</strong> — 180 questões + redação dissertativo-argumentativa</p>
+                </div>
+                <div class="info-card">
+                    <span class="info-card-icon">📅</span>
+                    <h4>Calendário típico</h4>
+                    <p>Inscrições: <strong>maio–junho</strong> | Provas: novembro | Resultado: janeiro</p>
+                </div>
+                <div class="info-card">
+                    <span class="info-card-icon">🆓</span>
+                    <h4>Isenção de taxa</h4>
+                    <p>Alunos de escola pública no último ano do EM têm <strong>isenção automática</strong></p>
+                </div>
+            </div>
+
+            <div class="cotas-section">
+                <h3>Estrutura das Provas</h3>
+                <table class="cotas-table">
+                    <thead><tr><th>Dia</th><th>Conteúdo</th><th>Questões</th><th>Tempo</th></tr></thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>1º dia</strong></td>
+                            <td>Linguagens + Ciências Humanas + Redação</td>
+                            <td>90 questões + 1 redação</td>
+                            <td>5h30</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2º dia</strong></td>
+                            <td>Matemática + Ciências da Natureza</td>
+                            <td>90 questões</td>
+                            <td>5h</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="cotas-section">
+                <h3>O que fazer com a nota do ENEM</h3>
+                <div class="timeline">
+                    <div class="tl-item">
+                        <div class="tl-dot"></div>
+                        <h4>SISU — Universidades Federais Gratuitas</h4>
+                        <p>Inscrição em janeiro. Nota do ENEM determina aprovação em cursos de universidades federais como UNIFESP, UFSCar, UFABC e outras.</p>
+                    </div>
+                    <div class="tl-item">
+                        <div class="tl-dot"></div>
+                        <h4>ProUni — Bolsas em Faculdades Privadas</h4>
+                        <p>Bolsas de 50% ou 100% em instituições privadas. Renda familiar ≤ 1,5 SM per capita para bolsa integral.</p>
+                    </div>
+                    <div class="tl-item">
+                        <div class="tl-dot"></div>
+                        <h4>Fuvest — Modalidade ENEM</h4>
+                        <p>50% das vagas da USP são preenchidas por nota do ENEM, sem 2ª fase da Fuvest.</p>
+                    </div>
+                    <div class="tl-item">
+                        <div class="tl-dot"></div>
+                        <h4>FIES — Financiamento Estudantil</h4>
+                        <p>Financiamento de cursos em faculdades privadas. Processo seletivo após divulgação do ENEM.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tips-box">
+                <h3>💡 Dicas para o ENEM</h3>
+                <ul>
+                    <li>A redação vale 1000 pontos — é a maior nota unitária e a mais diferenciadora. Invista pesado</li>
+                    <li>Questões do ENEM testam raciocínio, não decoreba — treine interpretação de textos e gráficos</li>
+                    <li>Alunos da rede pública no último ano do EM têm isenção: não pague a taxa desnecessariamente</li>
+                    <li>Fazer ENEM e Provão no mesmo ano é possível e estratégico — calendários raramente colidem</li>
+                    <li>Use as provas dos últimos 10 anos disponíveis gratuitamente no site do INEP</li>
+                </ul>
+            </div>
+
+            <div class="vest-cta">
+                <h3>Monitoria gratuita de redação</h3>
+                <p>Nossos monitores corrigem redações do ENEM — entre no grupo!</p>
+                <a href="https://chat.whatsapp.com/DKwd9hgYNHGKSSyKP9tJhS" target="_blank">Entrar no WhatsApp →</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-section">
+                <h3>Grupo de Apoio</h3>
+                <p>Entre no grupo do WhatsApp e tire suas dúvidas com outros candidatos!</p>
+                <a class="group-link nav-button" href="https://chat.whatsapp.com/DKwd9hgYNHGKSSyKP9tJhS" target="_blank">Entrar no Grupo</a>
+            </div>
+            <div class="footer-section">
+                <h3>Contato</h3>
+                <div class="contact-container">
+                    <div class="contact-box">
+                        <p><strong>Kauan Yuri</strong></p>
+                        <p><a href="https://wa.me/5516994297281" target="_blank">16 99429-7281</a></p>
+                        <p><a href="https://www.instagram.com/dev.kauan" target="_blank">@dev.kauan</a></p>
+                    </div>
+                    <div class="contact-box">
+                        <p><strong>Felipe Galvão</strong></p>
+                        <p><a href="https://wa.me/5516992145809" target="_blank">16 99214-5809</a></p>
+                        <p><a href="https://www.instagram.com/felipe.prazeresz" target="_blank">@felipe.prazeresz</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 MEUPROVAO. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Mobile menu
+            const toggle = document.querySelector('.mobile-menu-toggle');
+            const nav    = document.querySelector('.mobile-nav');
+            if (toggle && nav) {
+                toggle.addEventListener('click', () => {
+                    nav.classList.toggle('active');
+                    toggle.setAttribute('aria-expanded', nav.classList.contains('active'));
+                });
+            }
+
+            // Tab switching
+            const tabs   = document.querySelectorAll('.vest-tab');
+            const panels = document.querySelectorAll('.vest-panel');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const target = tab.dataset.panel;
+
+                    tabs.forEach(t   => { t.classList.remove('active'); t.setAttribute('aria-selected','false'); });
+                    panels.forEach(p => p.classList.remove('active'));
+
+                    tab.classList.add('active');
+                    tab.setAttribute('aria-selected','true');
+                    const panel = document.getElementById(`panel-${target}`);
+                    if (panel) {
+                        panel.classList.add('active');
+                        // Trigger fade-in for newly visible panel
+                        panel.querySelectorAll('.fade-in').forEach(el => {
+                            el.classList.remove('visible');
+                            setTimeout(() => el.classList.add('visible'), 60);
+                        });
+                    }
+                });
+            });
+
+            // Scroll animations
+            const obs = new IntersectionObserver(entries => {
+                entries.forEach(e => {
+                    if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+                });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+        });
+    </script>
+</body>
+</html>

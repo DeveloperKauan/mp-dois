@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Novidades - MEUPROVAO</title>
+    <link rel="icon" href="{{ url_for('static', filename='logo2.png') }}" type="image/png">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --red:    #ed0707;
+            --red-dk: #B22222;
+            --gold:   #FFD700;
+            --ink:    #111111;
+            --muted:  #6b6b6b;
+            --surface:#f5f3ef;
+            --white:  #ffffff;
+            --radius: 16px;
+        }
+        .blog-body { font-family: 'DM Sans', sans-serif; }
+
+        /* ── HERO ── */
+        .blog-hero {
+            background: var(--ink);
+            color: white;
+            padding: 64px 24px 72px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .blog-hero::before {
+            content:'';
+            position:absolute;
+            inset:0;
+            background: radial-gradient(ellipse 60% 80% at 80% 0%, rgba(237,7,7,.25) 0%, transparent 65%);
+            pointer-events:none;
+        }
+        .blog-hero-eyebrow {
+            font-family:'Syne',sans-serif;
+            font-size:11px; font-weight:700;
+            letter-spacing:.18em; text-transform:uppercase;
+            color:var(--gold); margin-bottom:16px;
+            opacity:0; animation: fadeUp .5s .1s forwards;
+        }
+        .blog-hero h1 {
+            font-family:'Syne',sans-serif;
+            font-size:clamp(2rem,5vw,3.4rem);
+            font-weight:800; margin:0 auto 18px;
+            line-height:1.1;
+            opacity:0; animation: fadeUp .5s .2s forwards;
+        }
+        .blog-hero p {
+            font-size:1rem; color:rgba(255,255,255,.72);
+            max-width:460px; margin:0 auto;
+            opacity:0; animation: fadeUp .5s .32s forwards;
+        }
+
+        /* ── LAYOUT ── */
+        .blog-layout {
+            max-width: 1060px;
+            margin: 0 auto;
+            padding: 56px 24px;
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 40px;
+            align-items: start;
+        }
+        @media (max-width: 820px) {
+            .blog-layout { grid-template-columns: 1fr; }
+            .blog-sidebar { display: none; }
+        }
+
+        /* ── POST CARDS ── */
+        .blog-posts { display: flex; flex-direction: column; gap: 28px; }
+
+        .blog-post-card {
+            background: var(--white);
+            border: 1.5px solid #ebebeb;
+            border-radius: var(--radius);
+            overflow: hidden;
+            transition: box-shadow .22s, transform .22s;
+            cursor: pointer;
+        }
+        .blog-post-card:hover {
+            box-shadow: 0 16px 40px rgba(0,0,0,.1);
+            transform: translateY(-3px);
+        }
+        .blog-post-card.featured {
+            border-color: rgba(237,7,7,.2);
+        }
+        .blog-post-header {
+            padding: 28px 28px 0;
+        }
+        .post-meta {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+        }
+        .post-tag {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 99px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+        }
+        .tag-novidade  { background: #fff3e0; color: #e65100; }
+        .tag-dados     { background: #e8f5e9; color: #2e7d32; }
+        .tag-monitoria { background: #e3f2fd; color: #1565c0; }
+        .tag-comunidade{ background: #f3e5f5; color: #6a1b9a; }
+        .tag-destaque  { background: #fff8e1; color: #f57f17; }
+
+        .post-date {
+            font-size: 12px;
+            color: var(--muted);
+            font-weight: 500;
+        }
+        .blog-post-card h2 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--ink);
+            margin: 0 0 10px;
+            line-height: 1.25;
+        }
+        .blog-post-card .post-excerpt {
+            font-size: .93rem;
+            line-height: 1.65;
+            color: #555;
+            margin: 0;
+        }
+        .blog-post-footer {
+            padding: 16px 28px 22px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .post-author {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            font-size: .85rem;
+            color: var(--muted);
+        }
+        .author-avatar {
+            width: 30px; height: 30px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--red), #ff6b6b);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 13px; color: white; font-weight: 700;
+            flex-shrink: 0;
+        }
+        .post-read-more {
+            font-size: .85rem;
+            font-weight: 700;
+            color: var(--red);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: gap .18s;
+        }
+        .post-read-more:hover { gap: 8px; }
+        .post-comments-count {
+            font-size: .8rem;
+            color: var(--muted);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* ── MODAL DE POST COMPLETO ── */
+        .post-modal-overlay {
+            display: none;
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,.55);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            padding: 24px;
+            overflow-y: auto;
+        }
+        .post-modal-overlay.open { display: flex; align-items: flex-start; justify-content: center; }
+        .post-modal {
+            background: var(--white);
+            border-radius: 20px;
+            max-width: 680px;
+            width: 100%;
+            margin: auto;
+            overflow: hidden;
+            animation: slideUp .3s ease;
+        }
+        @keyframes slideUp {
+            from { transform: translateY(40px); opacity: 0; }
+            to   { transform: translateY(0); opacity: 1; }
+        }
+        .modal-header {
+            padding: 32px 32px 0;
+        }
+        .modal-close {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 16px;
+        }
+        .modal-close button {
+            background: #f0f0f0;
+            border: none;
+            border-radius: 50%;
+            width: 36px; height: 36px;
+            cursor: pointer;
+            font-size: 18px;
+            color: var(--ink);
+            display: flex; align-items: center; justify-content: center;
+            transition: background .18s;
+        }
+        .modal-close button:hover { background: #e0e0e0; }
+        .modal-body {
+            padding: 0 32px 28px;
+        }
+        .modal-body h2 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.7rem;
+            font-weight: 800;
+            color: var(--ink);
+            margin: 0 0 16px;
+            line-height: 1.2;
+        }
+        .modal-body .modal-content {
+            font-size: .97rem;
+            line-height: 1.78;
+            color: #444;
+        }
+        .modal-body .modal-content p { margin-bottom: 14px; }
+        .modal-body .modal-content strong { color: var(--ink); }
+
+        /* ── COMENTÁRIOS ── */
+        .comments-section {
+            border-top: 1px solid #eee;
+            padding: 24px 32px 32px;
+        }
+        .comments-section h3 {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 1rem;
+            color: var(--ink);
+            margin: 0 0 20px;
+        }
+        .comment-form {
+            margin-bottom: 24px;
+        }
+        .comment-form input,
+        .comment-form textarea {
+            width: 100%;
+            padding: 11px 14px;
+            border: 1.5px solid #e0e0e0;
+            border-radius: 10px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: .9rem;
+            color: var(--ink);
+            background: var(--white);
+            outline: none;
+            transition: border-color .18s;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
+        .comment-form input:focus,
+        .comment-form textarea:focus { border-color: var(--red); }
+        .comment-form textarea { resize: vertical; min-height: 88px; }
+        .comment-submit {
+            background: linear-gradient(135deg, var(--red-dk), var(--red));
+            color: white;
+            border: none;
+            border-radius: 99px;
+            padding: 10px 22px;
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: .88rem;
+            cursor: pointer;
+            transition: opacity .18s, transform .18s;
+        }
+        .comment-submit:hover { opacity: .88; transform: translateY(-1px); }
+        .comments-list { display: flex; flex-direction: column; gap: 14px; }
+        .comment-item {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 14px 16px;
+        }
+        .comment-item-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+        .comment-avatar {
+            width: 26px; height: 26px;
+            border-radius: 50%;
+            background: var(--red);
+            color: white;
+            font-size: 11px; font-weight: 700;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+        .comment-name  { font-weight: 700; font-size: .88rem; color: var(--ink); }
+        .comment-date  { font-size: .78rem; color: var(--muted); margin-left: auto; }
+        .comment-text  { font-size: .88rem; color: #444; line-height: 1.55; }
+
+        /* ── SIDEBAR ── */
+        .blog-sidebar { display: flex; flex-direction: column; gap: 20px; }
+        .sidebar-card {
+            background: var(--white);
+            border: 1.5px solid #ebebeb;
+            border-radius: var(--radius);
+            padding: 22px;
+        }
+        .sidebar-card h3 {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: .95rem;
+            color: var(--ink);
+            margin: 0 0 14px;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            font-size: .82rem;
+        }
+        .sidebar-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+        .sidebar-tag {
+            padding: 5px 12px;
+            border: 1.5px solid #e0e0e0;
+            border-radius: 99px;
+            font-size: .8rem;
+            font-weight: 600;
+            color: var(--ink);
+            cursor: pointer;
+            transition: all .18s;
+        }
+        .sidebar-tag:hover,
+        .sidebar-tag.active { background: var(--red); border-color: var(--red); color: white; }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+            text-decoration: none;
+            color: var(--ink);
+            font-size: .88rem;
+            font-weight: 500;
+            transition: color .18s;
+        }
+        .sidebar-link:last-child { border-bottom: none; }
+        .sidebar-link:hover { color: var(--red); }
+        .sidebar-link-icon { font-size: 1rem; }
+
+        /* Animations */
+        @keyframes fadeUp {
+            from { opacity:0; transform:translateY(18px); }
+            to   { opacity:1; transform:translateY(0); }
+        }
+        .fade-in { opacity:0; transform:translateY(20px); transition: opacity .5s ease, transform .5s ease; }
+        .fade-in.visible { opacity:1; transform:translateY(0); }
+
+        /* Dark mode */
+        body.dark-mode .blog-post-card  { background: #2c2c2c; border-color: #444; }
+        body.dark-mode .blog-post-card h2 { color: #f0f0f0; }
+        body.dark-mode .post-excerpt    { color: #bbb; }
+        body.dark-mode .post-modal      { background: #1e1e1e; }
+        body.dark-mode .modal-body h2   { color: #f0f0f0; }
+        body.dark-mode .modal-body .modal-content { color: #ccc; }
+        body.dark-mode .comments-section { border-color: #333; }
+        body.dark-mode .comment-form input,
+        body.dark-mode .comment-form textarea { background: #2c2c2c; border-color: #555; color: #e0e0e0; }
+        body.dark-mode .comment-item    { background: #2c2c2c; }
+        body.dark-mode .comment-text    { color: #ccc; }
+        body.dark-mode .comment-name    { color: #f0f0f0; }
+        body.dark-mode .sidebar-card    { background: #2c2c2c; border-color: #444; }
+        body.dark-mode .sidebar-link    { color: #e0e0e0; border-color: #444; }
+        body.dark-mode .sidebar-tag     { border-color: #555; color: #e0e0e0; }
+        body.dark-mode .modal-close button { background: #333; color: #e0e0e0; }
+    </style>
+</head>
+<body class="blog-body">
+
+    <header class="top-nav">
+        <div class="nav-inner">
+            <div class="nav-left">
+                <a href="{{ url_for('index_page') }}">
+                    <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo MEUPROVAO" class="header-logo">
+                </a>
+            </div>
+            <button class="mobile-menu-toggle" aria-label="Abrir menu" aria-expanded="false">&#9776;</button>
+            <div class="nav-actions desktop-nav">
+                <a href="{{ url_for('index_page') }}"         class="nav-button">Página Inicial</a>
+                <a href="{{ url_for('sobre_page') }}"         class="nav-button">Sobre Nós</a>
+                <a href="{{ url_for('vestibulares_page') }}"  class="nav-button">Vestibulares</a>
+                <a href="{{ url_for('formulario_page') }}"    class="nav-button">Enviar Nota</a>
+            </div>
+            <nav class="mobile-nav">
+                <a href="{{ url_for('index_page') }}"         class="nav-button">Página Inicial</a>
+                <a href="{{ url_for('sobre_page') }}"         class="nav-button">Sobre Nós</a>
+                <a href="{{ url_for('vestibulares_page') }}"  class="nav-button">Vestibulares</a>
+                <a href="{{ url_for('formulario_page') }}"    class="nav-button">Enviar Nota</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="blog-hero">
+        <p class="blog-hero-eyebrow">Blog & Novidades</p>
+        <h1>Fique por dentro de tudo</h1>
+        <p>Atualizações do projeto, dicas de estudo, análises de dados e muito mais.</p>
+    </section>
+
+    <div class="blog-layout">
+        <!-- ── POSTS ── -->
+        <main class="blog-posts fade-in" id="blog-posts-container">
+            <!-- Gerados pelo JS abaixo -->
+        </main>
+
+        <!-- ── SIDEBAR ── -->
+        <aside class="blog-sidebar fade-in">
+            <div class="sidebar-card">
+                <h3>Filtrar por tag</h3>
+                <div class="sidebar-tags" id="sidebar-tags">
+                    <span class="sidebar-tag active" data-tag="todos">Todos</span>
+                    <span class="sidebar-tag" data-tag="novidade">Novidade</span>
+                    <span class="sidebar-tag" data-tag="dados">Dados</span>
+                    <span class="sidebar-tag" data-tag="monitoria">Monitoria</span>
+                    <span class="sidebar-tag" data-tag="comunidade">Comunidade</span>
+                </div>
+            </div>
+            <div class="sidebar-card">
+                <h3>Links rápidos</h3>
+                <a href="{{ url_for('index_page') }}"        class="sidebar-link"><span class="sidebar-link-icon">🔍</span> Buscar notas de corte</a>
+                <a href="{{ url_for('vestibulares_page') }}" class="sidebar-link"><span class="sidebar-link-icon">📚</span> Guia de vestibulares</a>
+                <a href="{{ url_for('formulario_page') }}"   class="sidebar-link"><span class="sidebar-link-icon">📝</span> Enviar minha nota</a>
+                <a href="https://discord.gg/NFmkM5kNPX" target="_blank" class="sidebar-link"><span class="sidebar-link-icon">💬</span> Discord da comunidade</a>
+                <a href="{{ url_for('links_page') }}"        class="sidebar-link"><span class="sidebar-link-icon">🔗</span> Todos os links</a>
+            </div>
+            <div class="sidebar-card">
+                <h3>Nossa missão</h3>
+                <p style="font-size:.88rem; color:#666; line-height:1.6; margin:0;">
+                    Democratizar o acesso ao ensino superior público, tornando o Provão Paulista mais
+                    acessível, transparente e humano para todos os vestibulandos da rede pública.
+                </p>
+            </div>
+        </aside>
+    </div>
+
+    <!-- ── MODAL ── -->
+    <div class="post-modal-overlay" id="post-modal-overlay" role="dialog" aria-modal="true">
+        <div class="post-modal" id="post-modal">
+            <div class="modal-header">
+                <div class="modal-close">
+                    <button id="modal-close-btn" aria-label="Fechar">✕</button>
+                </div>
+                <div id="modal-meta" class="post-meta"></div>
+            </div>
+            <div class="modal-body">
+                <h2 id="modal-title"></h2>
+                <div class="modal-content" id="modal-content"></div>
+            </div>
+            <div class="comments-section">
+                <h3 id="comments-title">💬 Comentários</h3>
+                <div class="comment-form" id="comment-form">
+                    <input type="text" id="comment-name" placeholder="Seu nome (opcional)" maxlength="60" autocomplete="name">
+                    <textarea id="comment-text" placeholder="Deixe um comentário, dúvida ou mensagem..."></textarea>
+                    <button class="comment-submit" id="comment-submit">Publicar comentário</button>
+                </div>
+                <div class="comments-list" id="comments-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-section">
+                <h3>Grupo de Apoio</h3>
+                <p>Entre no grupo do WhatsApp e tire suas dúvidas!</p>
+                <a class="group-link nav-button" href="https://chat.whatsapp.com/DKwd9hgYNHGKSSyKP9tJhS" target="_blank">Entrar no Grupo</a>
+            </div>
+            <div class="footer-section">
+                <h3>Contato</h3>
+                <div class="contact-container">
+                    <div class="contact-box">
+                        <p><strong>Kauan Yuri</strong></p>
+                        <p><a href="https://wa.me/5516994297281" target="_blank">16 99429-7281</a></p>
+                    </div>
+                    <div class="contact-box">
+                        <p><strong>Felipe Galvão</strong></p>
+                        <p><a href="https://wa.me/5516992145809" target="_blank">16 99214-5809</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 MEUPROVAO. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+    // ══════════════════════════════════════════════
+    //  DADOS DOS POSTS
+    //  Para adicionar novos posts, basta adicionar
+    //  um objeto neste array.
+    // ══════════════════════════════════════════════
+    const POSTS = [
+        {
+            id: 1,
+            tag: 'novidade',
+            tagLabel: 'Novidade',
+            tagClass: 'tag-novidade',
+            date: '05/05/2026',
+            title: 'Dados de 2026 já estão disponíveis na plataforma!',
+            excerpt: 'Mais de 160 notas de aprovados no 1º e 2º semestre de 2026 foram integradas ao banco de dados. Agora você pode filtrar por ano, semestre e chamada.',
+            content: `
+                <p>A maior atualização da plataforma já chegou: <strong>262 registros de aprovados em 2025 e 2026</strong>
+                estão agora disponíveis para consulta no Meu Provão.</p>
+                <p>Você pode agora buscar por <strong>ano de aprovação</strong>, <strong>semestre</strong> (1º ou 2º)
+                e <strong>chamada</strong> (1ª chamada, 2ª chamada, listas de espera) — tornando a estimativa
+                de nota de corte muito mais precisa para a sua situação.</p>
+                <p>Os dados cobrem todas as universidades do sistema: <strong>FATEC, UNESP, UNICAMP e USP</strong>,
+                com notas de cursos de Engenharia, Medicina, Direito, cursos de Tecnologia e muito mais.</p>
+                <p><strong>Como colaborar?</strong> Se você foi aprovado em 2025 ou 2026, contribua com a sua nota
+                no formulário — cada dado ajuda centenas de outros candidatos a tomar decisões mais informadas.</p>
+            `,
+            author: 'Kauan Yuri',
+            authorInitial: 'K',
+            featured: true,
+            comments: [
+                { name: 'Ana Paula', text: 'Finalmente! Estava esperando pelos dados de 2026. Muito obrigada pela atualização!', date: '05/05/2026' },
+                { name: 'Diego F.', text: 'O filtro por chamada é genial. Dá pra ver que entrei pela 2ª chamada e ajuda a calibrar as expectativas.', date: '05/05/2026' },
+            ]
+        },
+        {
+            id: 2,
+            tag: 'monitoria',
+            tagLabel: 'Monitoria',
+            tagClass: 'tag-monitoria',
+            date: '28/04/2026',
+            title: 'Monitorias de Matemática e Física abertas para o 2º semestre',
+            excerpt: 'Com a proximidade das provas do Provão, abrimos novas turmas de monitoria gratuita. Vagas limitadas — inscreva-se no formulário.',
+            content: `
+                <p>O segundo semestre de 2026 está chegando e com ele as provas do Provão Paulista.
+                Nossas monitorias de <strong>Matemática</strong> e <strong>Física</strong> estão com vagas
+                abertas — totalmente gratuitas, online e conduzidas por universitários da USP.</p>
+                <p><strong>Como funciona:</strong></p>
+                <p>As monitorias acontecem via Google Meet, em grupos pequenos de até 8 alunos. Os monitores
+                explicam conteúdos específicos, resolvem exercícios junto com os alunos e respondem dúvidas.
+                A frequência é de <strong>1 encontro semanal de 1h30</strong>, com possibilidade de plantão
+                de dúvidas assíncrono no Discord.</p>
+                <p>Áreas disponíveis: Matemática (todos os níveis), Física (Mecânica e Eletromagnetismo),
+                Química (Orgânica e Inorgânica) e Linguagens (Redação e Literatura).</p>
+                <p>Para se inscrever, acesse o formulário no link abaixo ou na página de Links Úteis.</p>
+            `,
+            author: 'Enzo M.',
+            authorInitial: 'E',
+            featured: false,
+            comments: [
+                { name: 'Renata S.', text: 'Participei da monitoria de Química no semestre passado e foi incrível! Super recomendo!', date: '29/04/2026' },
+            ]
+        },
+        {
+            id: 3,
+            tag: 'dados',
+            tagLabel: 'Análise de Dados',
+            tagClass: 'tag-dados',
+            date: '15/04/2026',
+            title: 'As notas de corte de Medicina: o que os dados reais nos dizem',
+            excerpt: 'Analisamos todas as notas de aprovados em Medicina disponíveis no nosso banco de dados. Os resultados são surpreendentes — e mostram oportunidades reais para cotistas.',
+            content: `
+                <p>Com os dados de aprovados em Medicina consolidados na nossa plataforma, fizemos uma
+                análise das notas de corte por cota, universidade e chamada. O objetivo: desmistificar
+                o acesso à medicina pública para estudantes da rede pública.</p>
+                <p><strong>O que os dados mostram:</strong></p>
+                <p>As notas de corte para Medicina via cotas (L1, L2, L3, L4) são sistematicamente
+                <strong>menores</strong> do que as da ampla concorrência — a diferença pode chegar a
+                8-10 pontos em algumas universidades. Isso não é "moleza": é o sistema funcionando
+                como foi desenhado para funcionar.</p>
+                <p>Observamos também que as listas de espera (2ª e 3ª chamada) movimentam bastante
+                — candidatos com notas abaixo do corte da 1ª chamada frequentemente são chamados
+                nas rodadas seguintes. Vale muito ficar atento ao calendário.</p>
+                <p>Esses dados são reais, coletados com a ajuda de aprovados que compartilharam
+                suas notas voluntariamente. Se você foi aprovado, contribua com a sua nota!</p>
+            `,
+            author: 'Anderson B.',
+            authorInitial: 'A',
+            featured: false,
+            comments: []
+        },
+        {
+            id: 4,
+            tag: 'comunidade',
+            tagLabel: 'Comunidade',
+            tagClass: 'tag-comunidade',
+            date: '02/04/2026',
+            title: 'Meu Provão foi entrevistado pela EPTV — e a história é de vocês',
+            excerpt: 'A reportagem foi ao ar e o impacto foi imenso. Recebemos mensagens de estudantes de todo o interior de SP. Obrigado a todos que fazem isso possível.',
+            content: `
+                <p>Na última semana, o Meu Provão foi tema de uma reportagem especial da <strong>EPTV</strong>,
+                afiliada da Globo no interior de São Paulo. A matéria destacou a nossa plataforma de dados
+                colaborativos e as monitorias gratuitas como iniciativas que estão mudando a forma como
+                estudantes da rede pública se preparam para o Provão Paulista.</p>
+                <p>O que mais nos emocionou não foi a visibilidade — foi o que veio depois. Em menos de
+                48 horas, recebemos mais de <strong>200 mensagens</strong> de estudantes de cidades como
+                Ribeirão Preto, Bauru, Campinas, Presidente Prudente e dezenas de municípios menores,
+                muitos deles sem acesso a cursinhos ou qualquer forma de apoio estruturado.</p>
+                <p>É para essas pessoas que trabalhamos. Obrigado a todos os voluntários, monitores
+                e colaboradores que tornam o Meu Provão possível — vocês são a causa e o resultado
+                ao mesmo tempo.</p>
+                <p>Se você quer ajudar, seja como monitor, seja compartilhando sua nota ou apenas
+                divulgando o projeto na sua escola, cada ação conta.</p>
+            `,
+            author: 'Kauan Yuri',
+            authorInitial: 'K',
+            featured: false,
+            comments: [
+                { name: 'Fernanda R.', text: 'Vi a reportagem! Fiquei com os olhos cheios de água. Projeto incrível, parabéns a todos!', date: '03/04/2026' },
+                { name: 'Lucas P.', text: 'Minha irmã viu a reportagem e se cadastrou para monitoria. Muito obrigado por existirem!', date: '04/04/2026' },
+            ]
+        },
+    ];
+
+    // ══════════════════════════════════════════════
+    //  RENDERIZAÇÃO E INTERATIVIDADE
+    // ══════════════════════════════════════════════
+    let currentPostId   = null;
+    let currentComments = {};
+
+    // Inicializar comentários do localStorage
+    POSTS.forEach(p => {
+        const stored = localStorage.getItem(`meuprovao_comments_${p.id}`);
+        currentComments[p.id] = stored ? JSON.parse(stored) : [...p.comments];
+    });
+
+    function renderPosts(filter = 'todos') {
+        const container = document.getElementById('blog-posts-container');
+        container.innerHTML = '';
+        const filtered = filter === 'todos' ? POSTS : POSTS.filter(p => p.tag === filter);
+
+        if (filtered.length === 0) {
+            container.innerHTML = '<p style="color:#999; font-size:.95rem;">Nenhum post encontrado para este filtro.</p>';
+            return;
+        }
+
+        filtered.forEach((post, i) => {
+            const commentCount = currentComments[post.id]?.length || 0;
+            const card = document.createElement('div');
+            card.className = `blog-post-card${post.featured ? ' featured' : ''}`;
+            card.style.animationDelay = `${i * 0.07}s`;
+            card.innerHTML = `
+                <div class="blog-post-header">
+                    <div class="post-meta">
+                        <span class="post-tag ${post.tagClass}">${post.tagLabel}</span>
+                        <span class="post-date">${post.date}</span>
+                        <span class="post-comments-count">💬 ${commentCount}</span>
+                    </div>
+                    <h2>${post.title}</h2>
+                    <p class="post-excerpt">${post.excerpt}</p>
+                </div>
+                <div class="blog-post-footer">
+                    <div class="post-author">
+                        <div class="author-avatar">${post.authorInitial}</div>
+                        <span>${post.author}</span>
+                    </div>
+                    <a class="post-read-more" href="#" data-post-id="${post.id}">
+                        Ler mais <span>→</span>
+                    </a>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+
+        // Bind clicks
+        document.querySelectorAll('.post-read-more').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                openPost(parseInt(btn.dataset.postId));
+            });
+        });
+    }
+
+    function openPost(id) {
+        const post = POSTS.find(p => p.id === id);
+        if (!post) return;
+        currentPostId = id;
+
+        document.getElementById('modal-meta').innerHTML = `
+            <span class="post-tag ${post.tagClass}">${post.tagLabel}</span>
+            <span class="post-date" style="margin-left:8px;">${post.date}</span>
+        `;
+        document.getElementById('modal-title').textContent = post.title;
+        document.getElementById('modal-content').innerHTML = post.content;
+        renderComments(id);
+
+        document.getElementById('post-modal-overlay').classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+        document.getElementById('post-modal-overlay').classList.remove('open');
+        document.body.style.overflow = '';
+        currentPostId = null;
+    }
+
+    function renderComments(id) {
+        const list = document.getElementById('comments-list');
+        const comments = currentComments[id] || [];
+        const count = comments.length;
+        document.getElementById('comments-title').textContent = `💬 Comentários (${count})`;
+
+        if (comments.length === 0) {
+            list.innerHTML = '<p style="font-size:.88rem; color:#999; text-align:center; padding:12px 0;">Seja o primeiro a comentar!</p>';
+            return;
+        }
+
+        list.innerHTML = comments.map(c => `
+            <div class="comment-item">
+                <div class="comment-item-header">
+                    <div class="comment-avatar">${(c.name || 'A')[0].toUpperCase()}</div>
+                    <span class="comment-name">${c.name || 'Anônimo'}</span>
+                    <span class="comment-date">${c.date}</span>
+                </div>
+                <p class="comment-text">${c.text}</p>
+            </div>
+        `).join('');
+    }
+
+    function submitComment() {
+        if (currentPostId === null) return;
+        const nameEl = document.getElementById('comment-name');
+        const textEl = document.getElementById('comment-text');
+        const name   = nameEl.value.trim();
+        const text   = textEl.value.trim();
+        if (!text) { textEl.focus(); return; }
+
+        const now = new Date();
+        const date = `${String(now.getDate()).padStart(2,'0')}/${String(now.getMonth()+1).padStart(2,'0')}/${now.getFullYear()}`;
+        const comment = { name: name || 'Anônimo', text, date };
+
+        if (!currentComments[currentPostId]) currentComments[currentPostId] = [];
+        currentComments[currentPostId].push(comment);
+        localStorage.setItem(`meuprovao_comments_${currentPostId}`, JSON.stringify(currentComments[currentPostId]));
+
+        nameEl.value = '';
+        textEl.value = '';
+        renderComments(currentPostId);
+        renderPosts(document.querySelector('.sidebar-tag.active')?.dataset.tag || 'todos');
+    }
+
+    // ── Event listeners ──
+    document.addEventListener('DOMContentLoaded', () => {
+        renderPosts();
+
+        // Mobile menu
+        const toggle = document.querySelector('.mobile-menu-toggle');
+        const nav    = document.querySelector('.mobile-nav');
+        if (toggle && nav) {
+            toggle.addEventListener('click', () => {
+                nav.classList.toggle('active');
+                toggle.setAttribute('aria-expanded', nav.classList.contains('active'));
+            });
+        }
+
+        // Sidebar tags
+        document.querySelectorAll('.sidebar-tag').forEach(tag => {
+            tag.addEventListener('click', () => {
+                document.querySelectorAll('.sidebar-tag').forEach(t => t.classList.remove('active'));
+                tag.classList.add('active');
+                renderPosts(tag.dataset.tag);
+            });
+        });
+
+        // Modal close
+        document.getElementById('modal-close-btn').addEventListener('click', closeModal);
+        document.getElementById('post-modal-overlay').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('post-modal-overlay')) closeModal();
+        });
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+        // Comment submit
+        document.getElementById('comment-submit').addEventListener('click', submitComment);
+        document.getElementById('comment-text').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && e.ctrlKey) submitComment();
+        });
+
+        // Scroll animations
+        const obs = new IntersectionObserver(entries => {
+            entries.forEach(e => {
+                if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+            });
+        }, { threshold: 0.08 });
+        document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+    });
+    </script>
+</body>
+</html>
