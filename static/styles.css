@@ -1009,14 +1009,17 @@ body.dark-mode .info-trigger {
         left: 0;
         width: 100%;
         max-width: 100vw;
-        background-color: #ffffff;
+        /* Garantir que o menu não exceda a largura da viewport */
+        background-color: var(--primary-color);
         padding: 0;
-        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.16);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         z-index: 99;
         max-height: calc(100vh - 60px);
         overflow-y: auto;
         overflow-x: hidden;
+        /* Impedir scroll horizontal no próprio menu */
         box-sizing: border-box;
+        /* Adicionado para garantir que width:100% inclua padding/border se houver */
     }
     .mobile-nav.active {
         display: flex;
@@ -1024,28 +1027,28 @@ body.dark-mode .info-trigger {
     .mobile-nav .nav-button {
         display: block;
         width: 100%;
-        text-align: left;
-        padding: 15px 22px;
-        border: none;
-        border-bottom: 1px solid rgba(10, 10, 10, 0.07);
-        color: #0A0A0A !important;
-        background: none !important;
-        margin: 0;
-        border-radius: 0;
-        font-size: 0.95rem;
-        font-weight: 700;
-        letter-spacing: 0;
-        transition: background 0.15s ease, color 0.15s ease;
-        box-shadow: none !important;
-        transform: none !important;
+        text-align: center;
+        padding: 12px 20px;
+        /* border-bottom: 1px solid rgba(255,255,255,0.2); */
+        /* Removido para aplicar borda completa */
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        /* Borda branca semi-transparente em todos os lados */
+        color: white;
+        background: none;
+        margin: 5px 10px;
+        /* Adiciona margem para espaçamento entre botões e das bordas do menu */
+        border-radius: var(--border-radius-md);
+        /* Adiciona bordas arredondadas */
+        font-weight: 600;
+        transition: background-color 0.2s ease, border-color 0.2s ease;
     }
     .mobile-nav .nav-button:hover {
-        background: rgba(10, 10, 10, 0.04) !important;
-        color: #8A0B0B !important;
-        transform: none !important;
+        background: rgba(255, 255, 255, 0.1);
+        border-color: white;
     }
-    .mobile-nav > *:last-child {
-        border-bottom: none;
+    /* Remove a margem inferior do último botão ou elemento que possa ser um botão */
+    .mobile-nav>*:last-child {
+        margin-bottom: 5px;
     }
     .mobile-nav #calculatorContainerMobile {
         background-color: rgba(0, 0, 0, 0.1);
@@ -1769,6 +1772,7 @@ body.dark-mode #advanced-filters {
 
 html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
 }
 
 body {
@@ -1778,6 +1782,7 @@ body {
         var(--silver);
     color: var(--ink);
     letter-spacing: 0;
+    overflow-x: hidden;
 }
 
 body::selection {
@@ -1810,8 +1815,6 @@ body.blog-body {
 .header-logo {
     height: 58px;
     display: block;
-    max-width: 120px;
-    object-fit: contain;
 }
 
 .nav-actions {
@@ -1913,37 +1916,11 @@ body.blog-body {
 }
 
 .mobile-nav {
-    background: #ffffff;
+    background: rgba(255, 255, 255, 0.96);
     color: var(--ink);
-    border: none;
-    border-top: 1px solid rgba(10, 10, 10, 0.07);
-    border-radius: 0 0 var(--radius-ios) var(--radius-ios);
-    box-shadow: 0 16px 48px rgba(10, 10, 10, 0.14);
-}
-
-/* Força texto escuro em TODOS os links/botões do menu mobile */
-.mobile-nav a,
-.mobile-nav a.nav-button,
-.mobile-nav button,
-.mobile-nav button.nav-button {
-    color: var(--ink) !important;
-    background: transparent !important;
-    border: none !important;
-    border-bottom: 1px solid rgba(10, 10, 10, 0.06) !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
-    transform: none !important;
-    text-align: left !important;
-}
-
-.mobile-nav a:hover,
-.mobile-nav a.nav-button:hover,
-.mobile-nav button:hover,
-.mobile-nav button.nav-button:hover {
-    background: rgba(10, 10, 10, 0.04) !important;
-    color: var(--wine) !important;
-    transform: none !important;
-    box-shadow: none !important;
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-ios);
+    box-shadow: var(--deep-shadow);
 }
 
 .main-container,
@@ -1968,7 +1945,7 @@ body.blog-body {
     border-radius: calc(var(--radius-ios) + 8px);
     box-shadow: var(--float-shadow);
     overflow: hidden;
-    padding: clamp(20px, 3vw, 36px);
+    padding: clamp(24px, 5vw, 48px);
 }
 
 .app-hero {
@@ -2126,8 +2103,8 @@ body.blog-body {
 }
 
 @keyframes osGlide {
-    from { opacity: 0; transform: translateY(10px); }
-    to   { opacity: 1; transform: translateY(0); }
+    from { opacity: 0; transform: translateX(14px); }
+    to { opacity: 1; transform: translateX(0); }
 }
 
 .search-container h2,
@@ -2350,14 +2327,10 @@ textarea:focus {
     cursor: pointer;
 }
 
-.action-hub .hub-primary {
-    background: var(--pulse);
-    color: var(--oxygen);
-}
-
+.action-hub .hub-primary,
 .action-hub a:hover,
 .action-hub button:hover {
-    background: rgba(255, 255, 255, 0.13);
+    background: var(--pulse);
     color: var(--oxygen);
 }
 
@@ -2404,8 +2377,7 @@ textarea:focus {
     height: 58px;
     object-fit: contain;
     border-radius: 18px;
-    background: var(--oxygen);
-    border: 1px solid rgba(10, 10, 10, 0.08);
+    background: var(--silver);
     padding: 8px;
 }
 
@@ -2487,7 +2459,7 @@ textarea:focus {
     background: var(--ink);
     color: rgba(255, 255, 255, 0.78);
     border-radius: 36px 36px 0 0;
-    margin-top: 8px;
+    margin-top: 36px;
 }
 
 .footer h3 {
@@ -2519,7 +2491,7 @@ textarea:focus {
 
 @media (max-width: 768px) {
     body {
-        padding-bottom: 76px;
+        padding-bottom: 88px;
     }
 
     .desktop-nav {
@@ -2540,7 +2512,7 @@ textarea:focus {
 
     .main-container {
         width: min(100% - 20px, 1120px);
-        padding-bottom: 92px;
+        padding-bottom: 36px;
     }
 
     .app-hero,
@@ -2570,6 +2542,13 @@ textarea:focus {
     }
 }
 
+@media (min-width: 861px) {
+    /* Etapa 4: esconder hamburger explicitamente no desktop */
+    .mobile-menu-toggle {
+        display: none !important;
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
@@ -2581,11 +2560,11 @@ textarea:focus {
     }
 }
 
-/* Desktop refinement pass: red-led, compact and less redundant. */
+/* Font override: NÃO usar * para não matar fontes de subpáginas */
 body,
 body.vest-body,
 body.blog-body {
-    font-family: var(--font-reading);
+    font-family: var(--font-reading) !important;
 }
 
 h1,
@@ -2635,7 +2614,6 @@ h3,
         width: min(1180px, calc(100% - 56px));
         margin-top: 14px;
         gap: 14px;
-        padding-bottom: 20px;
     }
 
     .home-os .app-hero {
@@ -2930,6 +2908,7 @@ button {
         display: block;
     }
 
+    /* Etapa 4: sem dead zone — action-hub visível aqui também */
     .action-hub {
         display: grid;
     }
@@ -2945,11 +2924,11 @@ button {
     body.vest-body,
     body.blog-body {
         background:
-            linear-gradient(180deg, var(--pulse) 0, var(--wine) 7rem, #f4f4f8 7rem, #f4f4f8 100%);
+            linear-gradient(180deg, var(--pulse) 0, var(--wine) 11rem, #f4f4f8 11rem, #f4f4f8 100%);
     }
 
     .app-hero {
-        padding: 18px !important;
+        padding: 22px !important;
     }
 
     .hero-copy h1,
@@ -3016,155 +2995,277 @@ button {
     }
 }
 
-/* ══════════════════════════════════════════════════════════════════
-   PATCH DE QUALIDADE — melhorias de UX, tipografia, acessibilidade
-   e polimento visual. Aplicadas sobre o OS layer existente.
-   ══════════════════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════
+   ETAPAS 2, 3, 4 — PATCH FINAL
+   ═══════════════════════════════════════════════════════════════ */
 
-/* ── 15. Tipografia: suavização e renderização ── */
-body {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-rendering: optimizeLegibility;
+/* Etapa 2: garantir que nada estoure horizontalmente */
+*,
+*::before,
+*::after {
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
-/* ── 16. Scrollbar personalizada (webkit) ── */
-::-webkit-scrollbar { width: 7px; height: 7px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb {
-    background: rgba(10, 10, 10, 0.18);
-    border-radius: 99px;
-}
-::-webkit-scrollbar-thumb:hover {
-    background: rgba(138, 11, 11, 0.45);
+img, video, iframe, embed, object {
+    max-width: 100%;
+    height: auto;
 }
 
-/* ── 17. focus-visible: anel de foco apenas para teclado ── */
-*:focus { outline: none; }
-
-*:focus-visible {
-    outline: 2px solid var(--pulse);
-    outline-offset: 3px;
-    border-radius: 6px;
+/* Etapa 4: mobile-nav texto escuro sobre fundo branco */
+.mobile-nav {
+    background: #ffffff !important;
+    border-top: 1px solid rgba(10,10,10,0.07) !important;
+    border-radius: 0 0 22px 22px !important;
+    box-shadow: 0 16px 48px rgba(10,10,10,0.14) !important;
 }
 
-button:focus-visible,
-a:focus-visible,
-input:focus-visible,
-select:focus-visible,
-textarea:focus-visible {
-    outline: 2px solid var(--pulse);
-    outline-offset: 2px;
+.mobile-nav a,
+.mobile-nav a.nav-button,
+.mobile-nav button,
+.mobile-nav button.nav-button {
+    color: #0A0A0A !important;
+    background: transparent !important;
+    border: none !important;
+    border-bottom: 1px solid rgba(10,10,10,0.06) !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    transform: none !important;
+    width: 100%;
+    padding: 15px 22px;
+    text-align: left;
+    font-weight: 700;
+    font-size: 0.95rem;
+    display: block;
 }
 
-/* ── 18. scroll-margin-top: header sticky não cobre âncoras ── */
-[id],
-section[id],
-div[id] {
-    scroll-margin-top: 80px;
+.mobile-nav a:hover,
+.mobile-nav a.nav-button:hover {
+    background: rgba(10,10,10,0.04) !important;
+    color: #8A0B0B !important;
+    transform: none !important;
 }
 
-/* ── 19. Stagger de entrada nos cards ── */
-.bento-grid > *:nth-child(1),
-.dashboard-grid > *:nth-child(1),
-.links-container > *:nth-child(1) { animation-delay: 0ms; }
-
-.bento-grid > *:nth-child(2),
-.dashboard-grid > *:nth-child(2),
-.links-container > *:nth-child(2) { animation-delay: 55ms; }
-
-.bento-grid > *:nth-child(3),
-.dashboard-grid > *:nth-child(3),
-.links-container > *:nth-child(3) { animation-delay: 110ms; }
-
-.bento-grid > *:nth-child(4),
-.links-container > *:nth-child(4) { animation-delay: 160ms; }
-
-.bento-grid > *:nth-child(5),
-.links-container > *:nth-child(5) { animation-delay: 205ms; }
-
-/* ── 20. Result card: detail toggle mais refinado ── */
-.result-details-toggle {
-    background: rgba(10, 10, 10, 0.04);
-    color: var(--wine);
-    border: 1px solid rgba(10, 10, 10, 0.08);
-    font-size: 0.8rem;
-    letter-spacing: 0.02em;
-    transition: background 180ms, border-color 180ms;
+.mobile-nav > *:last-child {
+    border-bottom: none !important;
 }
 
-.result-details-toggle:hover {
-    background: rgba(138, 11, 11, 0.07);
-    border-color: rgba(138, 11, 11, 0.2);
+/* Etapa 3: sobre-hero no padrão do site */
+body.sobre-body .sobre-hero {
+    background:
+        radial-gradient(circle at 14% 30%, rgba(255,255,255,.18), transparent 18rem),
+        linear-gradient(135deg, var(--pulse), var(--wine));
+    color: #fff;
+    padding: clamp(40px, 7vw, 68px) 24px clamp(48px, 8vw, 76px);
+    border-radius: 0;
+    box-shadow: none;
+    position: relative;
+    overflow: hidden;
 }
 
-/* ── 21. Result card: hover mais suave e elegante ── */
-.result-card {
-    transition: transform 220ms cubic-bezier(.2, .8, .2, 1),
-                box-shadow 220ms cubic-bezier(.2, .8, .2, 1);
+body.sobre-body .sobre-hero-eyebrow {
+    color: rgba(255,255,255,0.82) !important;
+    font-family: var(--font-display) !important;
+    font-size: 0.72rem !important;
+    font-weight: 900 !important;
+    letter-spacing: 0.1em !important;
+    text-transform: uppercase !important;
+    opacity: 1 !important;
+    animation: none !important;
 }
 
-.result-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 20px 55px rgba(10, 10, 10, 0.1);
+body.sobre-body .sobre-hero h1 {
+    font-family: var(--font-display) !important;
+    font-size: clamp(2rem, 5vw, 3.6rem) !important;
+    font-weight: 900 !important;
+    line-height: 1.06 !important;
+    letter-spacing: -0.02em !important;
+    color: #fff !important;
+    opacity: 1 !important;
+    animation: none !important;
 }
 
-/* ── 22. Nav button hover: borda mais visível no top-nav ── */
-.top-nav .nav-button:hover {
-    border-color: rgba(255, 255, 255, 0.5) !important;
+body.sobre-body .sobre-hero h1 em {
+    font-style: normal !important;
+    border-bottom: 3px solid rgba(255,215,0,0.7) !important;
+    color: #fff !important;
 }
 
-/* ── 23. `mobile-menu-toggle` explícito no desktop (>860px) ── */
-@media (min-width: 861px) {
-    .mobile-menu-toggle {
-        display: none !important;
-    }
+body.sobre-body .sobre-hero-sub {
+    color: rgba(255,255,255,0.85) !important;
+    font-size: clamp(1rem, 2vw, 1.1rem) !important;
+    line-height: 1.75 !important;
+    opacity: 1 !important;
+    animation: none !important;
 }
 
-/* ── 24. `link-card`: h3 e p garantidos legíveis ── */
-.link-card h3 {
-    color: var(--ink);
-    font-family: var(--font-display);
-    font-weight: 900;
-    font-size: 1rem;
-    margin: 10px 0 6px;
+body.sobre-body .sobre-hero-bar {
+    opacity: 1 !important;
+    animation: none !important;
+    background: rgba(255,215,0,0.8) !important;
 }
 
-.link-card p {
-    font-size: 0.9rem;
-    line-height: 1.58;
+/* Sobre: sections usando padrão OS layer */
+body.sobre-body .sobre-section {
+    background: var(--oxygen, #fff) !important;
+    border: 1px solid rgba(10,10,10,0.06) !important;
+    border-radius: var(--radius-ios, 28px) !important;
+    box-shadow: var(--float-shadow) !important;
+    padding: clamp(28px, 5vw, 44px) !important;
+    font-family: var(--font-reading) !important;
+    animation: osGlide 420ms cubic-bezier(.2,.8,.2,1) both !important;
 }
 
-/* ── 25. vest-tab: transição suave no indicador ativo ── */
-.vest-tab {
-    transition: color 0.18s, background 0.18s, border-color 0.18s;
+body.sobre-body .sobre-section h2 {
+    font-family: var(--font-display) !important;
+    font-weight: 900 !important;
+    letter-spacing: -0.015em !important;
+    color: var(--ink) !important;
+    line-height: 1.14 !important;
 }
 
-/* ── 26. `metric-tile strong`: números grandes com tabular-nums ── */
-.metric-tile strong {
-    font-variant-numeric: tabular-nums;
-    letter-spacing: -0.01em;
+body.sobre-body .sobre-section p {
+    line-height: 1.8 !important;
+    color: #2d2d34 !important;
+    font-size: clamp(0.97rem, 1.6vw, 1.06rem) !important;
 }
 
-/* ── 27. Títulos: tracking ligeiramente negativo para look premium ── */
-h1, h2 {
-    letter-spacing: -0.015em;
+body.sobre-body .sobre-section-eyebrow {
+    color: var(--wine, #8A0B0B) !important;
+    font-family: var(--font-display) !important;
+    font-size: 0.72rem !important;
+    font-weight: 900 !important;
+    letter-spacing: 0.08em !important;
+    text-transform: uppercase !important;
 }
 
-/* ── 28. `sim-insight`: borda e padding mais modernos ── */
-.sim-insight {
-    border-left-width: 2px;
-    border-radius: 0 12px 12px 0;
+/* MVV cards — padrão OS layer */
+body.sobre-body .mvv-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+    gap: 18px;
+    padding: 0;
 }
 
-/* ── 29. Input/select: transição de transform ao focar (micro-toque) ── */
-input:focus,
-select:focus,
-textarea:focus {
-    transform: none; /* evita o scale que pode quebrar layout em alguns browsers */
+body.sobre-body .mvv-card {
+    border-radius: var(--radius-ios, 28px) !important;
+    padding: clamp(24px, 4vw, 36px) !important;
+    font-family: var(--font-reading) !important;
+    animation: osGlide 420ms cubic-bezier(.2,.8,.2,1) both !important;
 }
 
-/* ── 30. Spinner: animação com ease melhor ── */
-.spinner {
-    animation: spin 0.75s cubic-bezier(.5, .1, .5, .9) infinite;
+body.sobre-body .mvv-card h3 {
+    font-family: var(--font-display) !important;
+    font-weight: 900 !important;
+    letter-spacing: -0.01em !important;
+    font-size: 1.15rem !important;
+}
+
+body.sobre-body .mvv-card ul li {
+    line-height: 1.65 !important;
+    padding: 10px 0 !important;
+    font-size: 0.94rem !important;
+}
+
+/* Equipe section — padrão OS layer */
+body.sobre-body .equipe-section {
+    background: var(--silver, #f4f4f8) !important;
+    padding: clamp(42px, 7vw, 68px) 24px !important;
+}
+
+body.sobre-body .equipe-header h2 {
+    font-family: var(--font-display) !important;
+    font-weight: 900 !important;
+    letter-spacing: -0.015em !important;
+    color: var(--ink) !important;
+}
+
+body.sobre-body .equipe-header p {
+    line-height: 1.75 !important;
+    color: var(--muted-ink, #666) !important;
+}
+
+body.sobre-body .stat-box {
+    border-radius: var(--radius-ios, 28px) !important;
+    background: var(--oxygen, #fff) !important;
+    border: 1px solid rgba(10,10,10,0.06) !important;
+    box-shadow: var(--float-shadow) !important;
+}
+
+body.sobre-body .stat-num {
+    color: var(--pulse, #eb0f0f) !important;
+    font-family: var(--font-display) !important;
+    font-variant-numeric: tabular-nums !important;
+}
+
+body.sobre-body .dept-pill {
+    background: var(--oxygen, #fff) !important;
+    border: 1.5px solid rgba(10,10,10,0.1) !important;
+    border-radius: 999px !important;
+    padding: 8px 18px !important;
+    font-size: 0.86rem !important;
+    font-weight: 700 !important;
+    color: var(--ink) !important;
+    transition: all 180ms !important;
+}
+
+body.sobre-body .dept-pill:hover {
+    border-color: var(--wine) !important;
+    background: rgba(138,11,11,0.04) !important;
+}
+
+/* CTA banner — padrão OS layer */
+body.sobre-body .cta-banner {
+    background: var(--ink, #0A0A0A) !important;
+    color: var(--oxygen, #fff) !important;
+    padding: clamp(48px, 8vw, 72px) 24px !important;
+    text-align: center !important;
+    border-radius: 36px 36px 0 0 !important;
+    margin-top: 8px !important;
+}
+
+body.sobre-body .cta-banner h2 {
+    font-family: var(--font-display) !important;
+    font-weight: 900 !important;
+    font-size: clamp(1.6rem, 4vw, 2.6rem) !important;
+    letter-spacing: -0.015em !important;
+    margin-bottom: 16px !important;
+    color: #fff !important;
+}
+
+body.sobre-body .cta-banner p {
+    color: rgba(255,255,255,0.82) !important;
+    line-height: 1.75 !important;
+    max-width: 560px !important;
+    margin: 0 auto 32px !important;
+}
+
+body.sobre-body .cta-btn-primary {
+    background: linear-gradient(135deg, var(--pulse), var(--wine)) !important;
+    color: #fff !important;
+    border-radius: 999px !important;
+    font-family: var(--font-display) !important;
+    font-weight: 800 !important;
+    padding: 13px 28px !important;
+}
+
+body.sobre-body .cta-btn-secondary {
+    background: rgba(255,255,255,0.08) !important;
+    border: 1.5px solid rgba(255,255,255,0.22) !important;
+    color: #fff !important;
+    border-radius: 999px !important;
+    font-family: var(--font-display) !important;
+    font-weight: 800 !important;
+    padding: 13px 28px !important;
+}
+
+/* Divider mais sutil */
+body.sobre-body .sobre-divider {
+    background: linear-gradient(90deg, transparent, rgba(10,10,10,0.08), transparent) !important;
+    height: 1px !important;
+}
+
+/* Footer: reduzir margin-top excessivo */
+.footer {
+    margin-top: 8px;
 }
