@@ -6,311 +6,8 @@
     <title>Sobre Nós - MEUPROVAO</title>
     <link rel="icon" href="{{ url_for('static', filename='logo2.png') }}" type="image/png">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
     <style>
-        /* ── Design Tokens desta página ── */
-        :root {
-            --red:    #ed0707;
-            --red-dk: #B22222;
-            --gold:   #FFD700;
-            --ink:    #111111;
-            --muted:  #6b6b6b;
-            --surface:#f5f3ef;
-            --white:  #ffffff;
-            --radius: 18px;
-        }
-
-        .sobre-body { font-family: 'DM Sans', sans-serif; }
-
-        /* ── HERO ── */
-        .sobre-hero {
-            background: var(--ink);
-            color: var(--white);
-            padding: 80px 24px 90px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-        .sobre-hero::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background:
-                radial-gradient(ellipse 60% 60% at 20% 50%, rgba(237,7,7,.25) 0%, transparent 70%),
-                radial-gradient(ellipse 50% 70% at 80% 30%, rgba(255,215,0,.10) 0%, transparent 70%);
-            pointer-events: none;
-        }
-        .sobre-hero-eyebrow {
-            font-family: 'Syne', sans-serif;
-            font-size: 11px;
-            font-weight: 700;
-            letter-spacing: .18em;
-            text-transform: uppercase;
-            color: var(--gold);
-            margin-bottom: 20px;
-            opacity: 0;
-            animation: fadeUp .6s .1s forwards;
-        }
-        .sobre-hero h1 {
-            font-family: 'Syne', sans-serif;
-            font-size: clamp(2.4rem, 6vw, 4.2rem);
-            font-weight: 800;
-            line-height: 1.08;
-            margin: 0 auto 24px;
-            max-width: 700px;
-            opacity: 0;
-            animation: fadeUp .6s .2s forwards;
-        }
-        .sobre-hero h1 em {
-            font-style: normal;
-            color: var(--gold);
-        }
-        .sobre-hero-sub {
-            font-size: 1.1rem;
-            color: rgba(255,255,255,.72);
-            max-width: 520px;
-            margin: 0 auto;
-            line-height: 1.6;
-            opacity: 0;
-            animation: fadeUp .6s .35s forwards;
-        }
-        .sobre-hero-bar {
-            width: 48px;
-            height: 4px;
-            background: var(--gold);
-            border-radius: 2px;
-            margin: 32px auto 0;
-            opacity: 0;
-            animation: fadeUp .6s .45s forwards;
-        }
-
-        /* ── SEÇÃO ORIGEM ── */
-        .sobre-section {
-            max-width: 860px;
-            margin: 0 auto;
-            padding: 64px 24px;
-        }
-        .sobre-section-eyebrow {
-            font-family: 'Syne', sans-serif;
-            font-size: 10px;
-            font-weight: 700;
-            letter-spacing: .18em;
-            text-transform: uppercase;
-            color: var(--red);
-            margin-bottom: 12px;
-        }
-        .sobre-section h2 {
-            font-family: 'Syne', sans-serif;
-            font-size: clamp(1.6rem, 3.5vw, 2.4rem);
-            font-weight: 800;
-            color: var(--ink);
-            margin: 0 0 20px;
-            line-height: 1.15;
-        }
-        .sobre-section p {
-            font-size: 1.05rem;
-            line-height: 1.75;
-            color: #444;
-            margin-bottom: 16px;
-        }
-        .sobre-section p strong { color: var(--ink); }
-
-        /* ── MVV CARDS ── */
-        .mvv-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
-            max-width: 1060px;
-            margin: 0 auto;
-            padding: 0 24px 72px;
-        }
-        @media (max-width: 780px) {
-            .mvv-grid { grid-template-columns: 1fr; }
-        }
-        .mvv-card {
-            border-radius: var(--radius);
-            padding: 36px 28px;
-            position: relative;
-            overflow: hidden;
-            transition: transform .25s, box-shadow .25s;
-        }
-        .mvv-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 24px 48px rgba(0,0,0,.12);
-        }
-        .mvv-card.missao  { background: var(--ink); color: var(--white); }
-        .mvv-card.visao   { background: var(--red); color: var(--white); }
-        .mvv-card.valores { background: var(--surface); color: var(--ink); }
-
-        .mvv-card-icon {
-            font-size: 2.4rem;
-            margin-bottom: 20px;
-            display: block;
-        }
-        .mvv-card h3 {
-            font-family: 'Syne', sans-serif;
-            font-size: 1.25rem;
-            font-weight: 800;
-            margin: 0 0 16px;
-            letter-spacing: -.01em;
-        }
-        .mvv-card.missao h3,
-        .mvv-card.visao  h3  { color: var(--gold); }
-        .mvv-card.valores h3 { color: var(--red); }
-
-        .mvv-card ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        .mvv-card ul li {
-            font-size: .93rem;
-            line-height: 1.5;
-            padding: 7px 0;
-            border-bottom: 1px solid rgba(255,255,255,.1);
-            display: flex;
-            align-items: flex-start;
-            gap: 8px;
-        }
-        .mvv-card.valores ul li { border-bottom-color: rgba(0,0,0,.08); }
-        .mvv-card ul li:last-child { border-bottom: none; }
-        .mvv-card ul li::before {
-            content: '→';
-            font-size: .75rem;
-            margin-top: 2px;
-            flex-shrink: 0;
-            opacity: .6;
-        }
-        .mvv-card.missao ul li,
-        .mvv-card.visao  ul li  { color: rgba(255,255,255,.85); }
-        .mvv-card.valores ul li { color: #444; }
-
-        /* ── EQUIPE ── */
-        .equipe-section {
-            background: var(--surface);
-            padding: 64px 24px;
-        }
-        .equipe-inner {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-        .equipe-header {
-            text-align: center;
-            margin-bottom: 48px;
-        }
-        .equipe-header h2 {
-            font-family: 'Syne', sans-serif;
-            font-size: clamp(1.6rem, 3vw, 2.2rem);
-            font-weight: 800;
-            color: var(--ink);
-            margin: 0 0 12px;
-        }
-        .equipe-header p {
-            color: var(--muted);
-            font-size: 1rem;
-            max-width: 480px;
-            margin: 0 auto;
-            line-height: 1.6;
-        }
-        .stats-row {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            margin-bottom: 48px;
-        }
-        @media (max-width: 580px) { .stats-row { grid-template-columns: 1fr 1fr; } }
-        .stat-box {
-            background: var(--white);
-            border-radius: var(--radius);
-            padding: 28px 20px;
-            text-align: center;
-            box-shadow: 0 2px 12px rgba(0,0,0,.06);
-        }
-        .stat-box .stat-num {
-            font-family: 'Syne', sans-serif;
-            font-size: 2.6rem;
-            font-weight: 800;
-            color: var(--red);
-            line-height: 1;
-            display: block;
-        }
-        .stat-box .stat-label {
-            font-size: .82rem;
-            color: var(--muted);
-            margin-top: 6px;
-            font-weight: 500;
-        }
-
-        /* ── DEPARTAMENTOS ── */
-        .dept-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .dept-pill {
-            background: var(--white);
-            border: 1.5px solid #e0e0e0;
-            border-radius: 99px;
-            padding: 7px 16px;
-            font-size: .85rem;
-            font-weight: 600;
-            color: var(--ink);
-            white-space: nowrap;
-        }
-
-        /* ── CTA BANNER ── */
-        .cta-banner {
-            background: linear-gradient(135deg, var(--red-dk), var(--red));
-            color: var(--white);
-            padding: 64px 24px;
-            text-align: center;
-        }
-        .cta-banner h2 {
-            font-family: 'Syne', sans-serif;
-            font-size: clamp(1.6rem, 3.5vw, 2.4rem);
-            font-weight: 800;
-            margin: 0 0 16px;
-        }
-        .cta-banner p {
-            font-size: 1.05rem;
-            color: rgba(255,255,255,.82);
-            max-width: 480px;
-            margin: 0 auto 32px;
-            line-height: 1.6;
-        }
-        .cta-buttons {
-            display: flex;
-            gap: 14px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        .cta-btn {
-            display: inline-block;
-            padding: 13px 28px;
-            border-radius: 99px;
-            font-weight: 700;
-            font-size: .95rem;
-            text-decoration: none;
-            transition: transform .2s, box-shadow .2s;
-        }
-        .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.2); }
-        .cta-btn-primary { background: var(--gold); color: var(--ink); }
-        .cta-btn-secondary {
-            background: rgba(255,255,255,.15);
-            color: var(--white);
-            border: 1.5px solid rgba(255,255,255,.5);
-            backdrop-filter: blur(6px);
-        }
-
-        /* ── SEPARADOR ── */
-        .sobre-divider {
-            height: 1px;
-            background: linear-gradient(90deg, transparent, #e0e0e0, transparent);
-            margin: 0 24px;
-        }
-
-        /* ── ANIMATIONS ── */
+        /* Animações locais apenas */
         @keyframes fadeUp {
             from { opacity: 0; transform: translateY(20px); }
             to   { opacity: 1; transform: translateY(0); }
@@ -321,22 +18,8 @@
             transition: opacity .55s ease, transform .55s ease;
         }
         .fade-in.visible { opacity: 1; transform: translateY(0); }
-
-        /* Dark mode */
-        body.dark-mode .sobre-section h2 { color: #f0f0f0; }
-        body.dark-mode .sobre-section p  { color: #ccc; }
-        body.dark-mode .mvv-card.valores {
-            background: #2c2c2c;
-            color: #e0e0e0;
-        }
-        body.dark-mode .mvv-card.valores ul li { color: #ccc; }
-        body.dark-mode .equipe-section { background: #1e1e1e; }
-        body.dark-mode .stat-box { background: #2c2c2c; }
-        body.dark-mode .dept-pill { background: #2c2c2c; border-color: #444; color: #e0e0e0; }
-        body.dark-mode .equipe-header h2 { color: #f0f0f0; }
-    </style>
 </head>
-<body class="sobre-body">
+<body class="app-shell sobre-body">
 
     <!-- ── HEADER ── -->
     <header class="top-nav">
@@ -348,12 +31,16 @@
             </div>
             <button class="mobile-menu-toggle" aria-label="Abrir menu" aria-expanded="false">&#9776;</button>
             <div class="nav-actions desktop-nav">
+                <a href="{{ url_for('blog_page') }}"         class="nav-button">Blog</a>
+                <a href="{{ url_for('visualizador_pdf_page') }}" class="nav-button">Edital</a>
                 <a href="{{ url_for('index_page') }}"         class="nav-button">Página Inicial</a>
                 <a href="{{ url_for('links_page') }}"         class="nav-button">Links Úteis</a>
                 <a href="{{ url_for('formulario_page') }}"    class="nav-button">Enviar Nota</a>
                 <a href="{{ url_for('vestibulares_page') }}"  class="nav-button">Vestibulares</a>
             </div>
             <nav class="mobile-nav">
+                <a href="{{ url_for('blog_page') }}"         class="nav-button">Blog</a>
+                <a href="{{ url_for('visualizador_pdf_page') }}" class="nav-button">Edital</a>
                 <a href="{{ url_for('index_page') }}"         class="nav-button">Página Inicial</a>
                 <a href="{{ url_for('links_page') }}"         class="nav-button">Links Úteis</a>
                 <a href="{{ url_for('formulario_page') }}"    class="nav-button">Enviar Nota</a>
@@ -361,6 +48,13 @@
             </nav>
         </div>
     </header>
+
+    <nav class="action-hub" aria-label="Ações principais">
+        <a href="{{ url_for('index_page') }}"><span class="hub-icon">⌕</span><span>Buscar</span></a>
+        <a href="{{ url_for('vestibulares_page') }}"><span class="hub-icon">§</span><span>Guias</span></a>
+        <a href="{{ url_for('formulario_page') }}"><span class="hub-icon">＋</span><span>Enviar</span></a>
+        <a href="{{ url_for('links_page') }}"><span class="hub-icon">?</span><span>Apoio</span></a>
+    </nav>
 
     <!-- ── HERO ── -->
     <section class="sobre-hero">
@@ -399,9 +93,9 @@
     <div class="sobre-divider"></div>
 
     <!-- ── MVV ── -->
-    <div style="padding: 64px 0 0; text-align:center;">
+    <div style="padding: 0; text-align:center;">
         <p class="sobre-section-eyebrow" style="margin-bottom:10px;">O que nos move</p>
-        <h2 style="font-family:'Syne',sans-serif; font-size:clamp(1.6rem,3.5vw,2.4rem); font-weight:800; color:var(--ink,#111); margin:0 0 40px;">
+        <h2 style="font-size:clamp(1.6rem,3.5vw,2.4rem); margin:0 0 32px;">
             Missão, Visão e Valores
         </h2>
     </div>
