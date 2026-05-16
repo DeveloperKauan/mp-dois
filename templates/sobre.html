@@ -3,22 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Sobre Nós - MEUPROVAO</title>
+
     <link rel="icon" href="{{ url_for('static', filename='logo2.png') }}" type="image/png">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
     <style>
         /* Animações locais apenas */
         @keyframes fadeUp {
             from { opacity: 0; transform: translateY(20px); }
             to   { opacity: 1; transform: translateY(0); }
         }
+
         .fade-in {
             opacity: 0;
             transform: translateY(24px);
             transition: opacity .55s ease, transform .55s ease;
         }
-        .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
 </head>
+
 <body class="app-shell sobre-body">
 
     <!-- ── HEADER ── -->
@@ -29,26 +39,30 @@
                     <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo MEUPROVAO" class="header-logo">
                 </a>
             </div>
+
             <button class="mobile-menu-toggle" aria-label="Abrir menu" aria-expanded="false">&#9776;</button>
+
             <div class="nav-actions desktop-nav">
-                <a href="{{ url_for('blog_page') }}"         class="nav-button">Blog</a>
+                <a href="{{ url_for('blog_page') }}" class="nav-button">Blog</a>
                 <a href="{{ url_for('visualizador_pdf_page') }}" class="nav-button">Edital</a>
-                <a href="{{ url_for('index_page') }}"         class="nav-button">Página Inicial</a>
-                <a href="{{ url_for('links_page') }}"         class="nav-button">Links Úteis</a>
-                <a href="{{ url_for('formulario_page') }}"    class="nav-button">Enviar Nota</a>
-                <a href="{{ url_for('vestibulares_page') }}"  class="nav-button">Vestibulares</a>
+                <a href="{{ url_for('index_page') }}" class="nav-button">Página Inicial</a>
+                <a href="{{ url_for('links_page') }}" class="nav-button">Links Úteis</a>
+                <a href="{{ url_for('formulario_page') }}" class="nav-button">Enviar Nota</a>
+                <a href="{{ url_for('vestibulares_page') }}" class="nav-button">Vestibulares</a>
             </div>
+
             <nav class="mobile-nav">
-                <a href="{{ url_for('blog_page') }}"         class="nav-button">Blog</a>
+                <a href="{{ url_for('blog_page') }}" class="nav-button">Blog</a>
                 <a href="{{ url_for('visualizador_pdf_page') }}" class="nav-button">Edital</a>
-                <a href="{{ url_for('index_page') }}"         class="nav-button">Página Inicial</a>
-                <a href="{{ url_for('links_page') }}"         class="nav-button">Links Úteis</a>
-                <a href="{{ url_for('formulario_page') }}"    class="nav-button">Enviar Nota</a>
-                <a href="{{ url_for('vestibulares_page') }}"  class="nav-button">Vestibulares</a>
+                <a href="{{ url_for('index_page') }}" class="nav-button">Página Inicial</a>
+                <a href="{{ url_for('links_page') }}" class="nav-button">Links Úteis</a>
+                <a href="{{ url_for('formulario_page') }}" class="nav-button">Enviar Nota</a>
+                <a href="{{ url_for('vestibulares_page') }}" class="nav-button">Vestibulares</a>
             </nav>
         </div>
     </header>
 
+    <!-- ── ACTION HUB ── -->
     <nav class="action-hub" aria-label="Ações principais">
         <a href="{{ url_for('index_page') }}"><span class="hub-icon">⌕</span><span>Buscar</span></a>
         <a href="{{ url_for('vestibulares_page') }}"><span class="hub-icon">§</span><span>Guias</span></a>
@@ -59,34 +73,43 @@
     <!-- ── HERO ── -->
     <section class="sobre-hero">
         <p class="sobre-hero-eyebrow">Quem somos</p>
-        <h1>Democratizando o acesso ao<br><em>ensino superior público</em></h1>
+
+        <h1>
+            Democratizando o acesso ao<br>
+            <em>ensino superior público</em>
+        </h1>
+
         <p class="sobre-hero-sub">
             Nascemos na USP para garantir que nenhum estudante da rede pública
             enfrente o Provão Paulista sem informação, sem apoio e sem comunidade.
         </p>
+
         <div class="sobre-hero-bar"></div>
     </section>
 
     <!-- ── ORIGEM ── -->
     <section class="sobre-section fade-in">
         <p class="sobre-section-eyebrow">Nossa história</p>
-        <h2>Estudantes que passaram pelo<br>sistema e decidiram mudá-lo</h2>
+
+        <h2>
+            Estudantes que passaram pelo<br>
+            sistema e decidiram mudá-lo
+        </h2>
+
         <p>
-            O <strong>Meu Provão</strong> nasceu de uma percepção simples e urgente: milhares de estudantes
-            da rede pública paulista prestam o Provão Paulista sem acesso a informações claras sobre
-            notas de corte, cotas, datas e processos — enquanto quem vem de escola particular
-            conta com cursinhos e consultores.
+            O <strong>Meu Provão</strong> nasceu de uma percepção simples e urgente:
+            milhares de estudantes da rede pública paulista prestam o Provão Paulista
+            sem acesso a informações claras sobre notas de corte, cotas e processos.
         </p>
+
         <p>
-            Fundado por estudantes da <strong>USP</strong>, o projeto reúne universitários voluntários
-            — incluindo mestrandos, doutorandos e pesquisadores — dispostos a compartilhar
-            conhecimento, dados e experiência. Não por obrigação, mas porque acreditam que
-            <strong>educação de qualidade não pode ser privilégio de poucos</strong>.
+            Fundado por estudantes da <strong>USP</strong>, o projeto reúne universitários
+            voluntários dispostos a compartilhar conhecimento e experiência.
         </p>
+
         <p>
-            Hoje somos uma plataforma colaborativa de dados, uma rede de monitorias gratuitas,
-            um espaço de acolhimento emocional e um movimento de pressão por mais transparência
-            institucional. Tudo ao mesmo tempo!
+            Hoje somos uma plataforma colaborativa de dados, monitorias gratuitas
+            e espaço de acolhimento estudantil.
         </p>
     </section>
 
@@ -95,73 +118,84 @@
     <!-- ── MVV ── -->
     <div style="padding: 0; text-align:center;">
         <p class="sobre-section-eyebrow" style="margin-bottom:10px;">O que nos move</p>
+
         <h2 style="font-size:clamp(1.6rem,3.5vw,2.4rem); margin:0 0 32px;">
             Missão, Visão e Valores
         </h2>
     </div>
+
     <div class="mvv-grid fade-in">
-        <!-- MISSÃO -->
+
         <div class="mvv-card missao">
             <span class="mvv-card-icon">🎯</span>
             <h3>Missão</h3>
             <ul>
                 <li>Democratizar o acesso ao ensino superior público</li>
                 <li>Tornar o vestibular mais acessível, justo e humano</li>
-                <li>Reduzir desigualdades educacionais estruturais</li>
-                <li>Oferecer suporte pedagógico, emocional e informacional</li>
+                <li>Reduzir desigualdades educacionais</li>
+                <li>Oferecer suporte pedagógico e emocional</li>
             </ul>
         </div>
-        <!-- VISÃO -->
+
         <div class="mvv-card visao">
             <span class="mvv-card-icon">🔭</span>
             <h3>Visão</h3>
             <ul>
-                <li>Transformar o vestibular em processo transparente e humano</li>
-                <li>Criar comunidade forte entre vestibulandos e universitários</li>
-                <li>Influenciar mudanças estruturais no sistema (VUNESP)</li>
-                <li>Tornar-se grupo de extensão universitária da USP</li>
+                <li>Transformar o vestibular em processo transparente</li>
+                <li>Criar comunidade entre estudantes</li>
+                <li>Influenciar mudanças estruturais no sistema</li>
+                <li>Ser referência em apoio estudantil</li>
             </ul>
         </div>
-        <!-- VALORES -->
+
         <div class="mvv-card valores">
             <span class="mvv-card-icon">💡</span>
             <h3>Valores</h3>
             <ul>
-                <li>Educação acessível para todos</li>
-                <li>Justiça educacional</li>
-                <li>Coletividade e colaboração</li>
-                <li>Acolhimento e escuta ativa</li>
-                <li>Transparência nos dados</li>
-                <li>Impacto social real</li>
+                <li>Educação acessível</li>
+                <li>Justiça social</li>
+                <li>Colaboração</li>
+                <li>Transparência</li>
+                <li>Impacto real</li>
             </ul>
         </div>
+
     </div>
 
     <div class="sobre-divider" style="margin-top:16px;"></div>
 
     <!-- ── EQUIPE ── -->
     <section class="equipe-section fade-in">
+
         <div class="equipe-inner">
+
             <div class="equipe-header">
                 <p class="sobre-section-eyebrow">As pessoas por trás</p>
                 <h2>Um time movido a propósito</h2>
-                <p>Voluntários de diferentes áreas, unidos pela mesma causa: educação pública de qualidade.</p>
+                <p>Voluntários unidos pela mesma causa: educação pública de qualidade.</p>
             </div>
+
             <div class="stats-row">
                 <div class="stat-box">
                     <span class="stat-num">30+</span>
                     <span class="stat-label">Monitores ativos</span>
                 </div>
+
                 <div class="stat-box">
                     <span class="stat-num">50+</span>
                     <span class="stat-label">Voluntários totais</span>
                 </div>
+
                 <div class="stat-box">
                     <span class="stat-num">4</span>
                     <span class="stat-label">Áreas de monitoria</span>
                 </div>
             </div>
-            <p class="sobre-section-eyebrow" style="margin-bottom:14px;">Nossas frentes de atuação</p>
+
+            <p class="sobre-section-eyebrow" style="margin-bottom:14px;">
+                Nossas frentes de atuação
+            </p>
+
             <div class="dept-grid">
                 <span class="dept-pill">📚 Pedagógico</span>
                 <span class="dept-pill">🤝 Recursos Humanos</span>
@@ -173,20 +207,25 @@
                 <span class="dept-pill">🤲 Afeto & Escuta</span>
                 <span class="dept-pill">🔗 Parcerias</span>
             </div>
+
         </div>
+
     </section>
 
     <!-- ── CTA ── -->
     <section class="cta-banner fade-in">
         <h2>Faça parte desta história</h2>
+
         <p>
-            Seja como monitor, como aluno, como parceiro ou apenas compartilhando —
+            Seja como monitor, aluno ou parceiro —
             cada ação fortalece a comunidade.
         </p>
+
         <div class="cta-buttons">
             <a href="https://forms.gle/heoRkGXLRSGtpTAW8" target="_blank" class="cta-btn cta-btn-primary">
                 Quero ser monitor
             </a>
+
             <a href="{{ url_for('links_page') }}" class="cta-btn cta-btn-secondary">
                 Ver todos os links
             </a>
@@ -199,34 +238,24 @@
             <div class="footer-section">
                 <h3>Grupo de Apoio</h3>
                 <p>Entre no grupo do WhatsApp e tire suas dúvidas com outros candidatos!</p>
-                <a class="group-link nav-button" href="https://chat.whatsapp.com/DKwd9hgYNHGKSSyKP9tJhS" target="_blank">Entrar no Grupo</a>
-            </div>
-            <div class="footer-section">
-                <h3>Contato</h3>
-                <div class="contact-container">
-                    <div class="contact-box">
-                        <p><strong>Kauan Yuri</strong></p>
-                        <p><a href="https://wa.me/5516994297281" target="_blank">16 99429-7281</a></p>
-                        <p><a href="https://www.instagram.com/dev.kauan" target="_blank">@dev.kauan</a></p>
-                    </div>
-                    <div class="contact-box">
-                        <p><strong>Felipe Galvão</strong></p>
-                        <p><a href="https://wa.me/5516992145809" target="_blank">16 99214-5809</a></p>
-                        <p><a href="https://www.instagram.com/felipe.prazeresz" target="_blank">@felipe.prazeresz</a></p>
-                    </div>
-                </div>
+                <a class="group-link nav-button" href="https://chat.whatsapp.com/DKwd9hgYNHGKSSyKP9tJhS" target="_blank">
+                    Entrar no Grupo
+                </a>
             </div>
         </div>
+
         <div class="footer-bottom">
             <p>&copy; 2024 MEUPROVAO. Todos os direitos reservados.</p>
         </div>
     </footer>
 
+    <!-- SCRIPT -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Mobile menu
+
             const toggle = document.querySelector('.mobile-menu-toggle');
-            const nav    = document.querySelector('.mobile-nav');
+            const nav = document.querySelector('.mobile-nav');
+
             if (toggle && nav) {
                 toggle.addEventListener('click', () => {
                     nav.classList.toggle('active');
@@ -234,12 +263,11 @@
                 });
             }
 
-            // Scroll animations
             const observer = new IntersectionObserver((entries) => {
-                entries.forEach(e => {
-                    if (e.isIntersecting) {
-                        e.target.classList.add('visible');
-                        observer.unobserve(e.target);
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
                     }
                 });
             }, { threshold: 0.12 });
@@ -247,5 +275,6 @@
             document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
         });
     </script>
+
 </body>
 </html>
